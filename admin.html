@@ -1,398 +1,271 @@
 <!DOCTYPE html>
 <html lang="pt-br">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Painel Administrativo - Machados</title>
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;800&display=swap" rel="stylesheet">
+    <title>Painel Administrativo - Sky Tecnologia</title>
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600;700&display=swap" rel="stylesheet">
     <style>
         :root {
-            --pm-green: #00853e;
-            --pm-blue: #0056b3;
-            --text: #0f172a;
-            --bg: #f0f4f8;
-            --white: #ffffff;
-            --radius: 20px;
-            --shadow-lg: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
-            --transition: all 0.3s ease;
+            --wp-bg: #f0f0f1; --wp-sidebar: #2c3338; --wp-blue: #2271b1;
+            --wp-blue-hover: #135e96; --wp-border: #c3c4c7; --wp-text: #3c434a;
         }
 
         * { box-sizing: border-box; margin: 0; padding: 0; }
-        body { font-family: 'Plus Jakarta Sans', sans-serif; background-color: var(--bg); color: var(--text); min-height: 100vh; }
+        body { font-family: 'Open Sans', sans-serif; background-color: var(--wp-bg); color: var(--wp-text); }
+        .hidden { display: none !important; }
 
-        /* --- TELA DE LOGIN --- */
-        .login-overlay {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
-            display: flex; align-items: center; justify-content: center; z-index: 10000;
-        }
+        /* --- LOGIN --- */
+        #login-screen { height: 100vh; display: flex; align-items: center; justify-content: center; background: var(--wp-bg); }
+        .login-wrapper { width: 320px; }
+        .login-logo { text-align: center; margin-bottom: 25px; }
+        .login-logo img { max-width: 150px; filter: drop-shadow(0 2px 4px rgba(0,0,0,0.1)); }
+        .login-card { background: #ffffff; padding: 26px 24px 34px; border: 1px solid var(--wp-border); box-shadow: 0 1px 3px rgba(0,0,0,0.04); }
+        .login-card label { display: block; font-size: 14px; margin-bottom: 5px; font-weight: 600; }
+        .login-card input { width: 100%; padding: 10px; margin-bottom: 15px; border: 1px solid #8c8f94; border-radius: 4px; font-size: 16px; }
+        .btn-wp { background: var(--wp-blue); color: white; border: none; padding: 10px 15px; border-radius: 4px; cursor: pointer; font-weight: 600; width: 100%; font-size: 14px; text-decoration: none; display: inline-block; text-align: center; }
+        .btn-wp:hover { background: var(--wp-blue-hover); }
 
-        .login-box {
-            background: white; padding: 40px; border-radius: 24px;
-            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
-            width: 100%; max-width: 400px; text-align: center; border: 1px solid #e2e8f0;
-        }
-
-        .login-box h2 { color: var(--pm-blue); margin-bottom: 25px; font-weight: 700; }
-        .login-box input {
-            width: 100%; padding: 12px 16px; margin-bottom: 15px;
-            border: 1.5px solid #e2e8f0; border-radius: 12px; outline: none;
-        }
-
-        /* --- LAYOUT DO PAINEL --- */
-        .admin-layout { display: none; max-width: 1200px; margin: 40px auto; padding: 0 20px; }
-        .admin-header {
-            background: white; padding: 20px 30px; border-radius: var(--radius);
-            display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
-        }
-
-        .tabs { display: flex; gap: 10px; background: #e2e8f0; padding: 10px; border-radius: 15px; margin-bottom: 30px; overflow-x: auto; }
-        .tab {
-            padding: 12px 20px; cursor: pointer; border-radius: 10px; font-weight: 800;
-            font-size: 0.8rem; text-transform: uppercase; color: #64748b; transition: var(--transition);
-        }
-        .tab.active { background: var(--pm-green); color: white; }
-
-        .panel-card { background: white; padding: 40px; border-radius: var(--radius); box-shadow: var(--shadow-lg); border-top: 8px solid var(--pm-green); display: none; }
-        .panel-card.active { display: block; }
-
-        .form-group { margin-bottom: 20px; }
-        label { display: block; font-weight: 800; font-size: 0.85rem; margin-bottom: 8px; color: var(--pm-blue); }
-        input, textarea, select { width: 100%; padding: 15px; border: 2px solid #f1f5f9; border-radius: 12px; outline: none; }
-
-        .btn-action { background: var(--pm-green); color: white; border: none; padding: 15px 30px; border-radius: 50px; font-weight: 800; cursor: pointer; }
+        /* --- DASHBOARD --- */
+        #painel { display: flex; min-height: 100vh; }
+        .sidebar { width: 180px; background: var(--wp-sidebar); color: white; position: fixed; height: 100%; display: flex; flex-direction: column; }
+        .sidebar-item { padding: 12px 15px; cursor: pointer; font-size: 13px; border-bottom: 1px solid rgba(255,255,255,0.05); }
+        .sidebar-item:hover, .sidebar-item.active { background: var(--wp-blue); }
         
-        table { width: 100%; border-collapse: collapse; margin-top: 20px; }
-        th { text-align: left; padding: 15px; font-size: 0.7rem; color: #94a3b8; text-transform: uppercase; }
-        td { padding: 15px; border-top: 1px solid #f1f5f9; font-size: 0.9rem; font-weight: 600; }
+        .btn-voltar-sidebar { display: block; text-decoration: none; color: #a7aaad; font-size: 12px; padding: 15px; border-bottom: 1px solid #444; margin-bottom: 10px; }
+        .btn-voltar-sidebar:hover { color: white; background: rgba(255,255,255,0.05); }
+
+        .main-content { margin-left: 180px; flex: 1; padding: 20px 40px; }
+        .wp-header { margin-bottom: 30px; border-bottom: 1px solid var(--wp-border); padding-bottom: 15px; display: flex; justify-content: space-between; align-items: center; }
+        .wp-header h1 { font-size: 23px; font-weight: 400; }
+        
+        .header-actions { display: flex; align-items: center; gap: 15px; }
+        .wp-card { background: white; border: 1px solid var(--wp-border); padding: 20px; margin-bottom: 20px; }
+        
+        table { width: 100%; border-collapse: collapse; background: white; border: 1px solid var(--wp-border); }
+        th { text-align: left; padding: 10px; background: #f6f7f7; font-size: 12px; border-bottom: 1px solid var(--wp-border); }
+        td { padding: 10px; border-bottom: 1px solid #f0f0f1; font-size: 13px; }
+        .btn-small { padding: 4px 8px; border-radius: 3px; border: 1px solid; cursor: pointer; font-size: 11px; font-weight: 600; }
+        .btn-approve { background: #edffef; border-color: #4caf50; color: #2e7d32; }
+        .btn-delete { background: #fff5f5; border-color: #f44336; color: #d32f2f; }
     </style>
 </head>
-
 <body>
 
-    <div id="login-overlay" class="login-overlay">
-        <div class="login-box" id="box-login">
-            <img src="logo.png" alt="Logo" style="width: 120px; margin-bottom: 20px;">
-            <h2>Painel Administrativo</h2>
-            <div id="form-login">
-                <input type="text" id="user" placeholder="Usuário">
-                <input type="password" id="pass" placeholder="Senha">
-                <button class="btn-action" style="width:100%" onclick="validarLogin()">ENTRAR</button>
-                <div style="margin-top: 15px; display: flex; flex-direction: column; gap: 10px;">
-                    <a href="#" onclick="toggleCadastro(true)" style="color: var(--pm-blue); font-size: 0.9rem; text-decoration:none;">Solicitar Novo Acesso</a>
-                    <a href="index.html" style="color: #64748b; font-size: 0.9rem; text-decoration: none;">← Voltar para o Site</a>
-                </div>
+    <div id="login-screen">
+        <div class="login-wrapper">
+            <div class="login-logo"><img src="logo.png"></div>
+            <div class="login-card" id="form-login">
+                <label>Usuário</label>
+                <input type="text" id="uIn">
+                <label>Senha</label>
+                <input type="password" id="pIn">
+                <button class="btn-wp" onclick="logar()">Acessar Painel</button>
+                <p style="text-align:center; margin-top:15px; font-size:12px;">
+                    <a href="#" onclick="toggleCadastro(true)" style="color:var(--wp-blue); text-decoration:none;">Solicitar acesso</a>
+                </p>
             </div>
-            <div id="form-cadastro" style="display: none;">
-                <p style="font-size: 0.8rem; color: #64748b; margin-bottom: 10px;">Solicitar aprovação do Master</p>
-                <input type="text" id="new-user" placeholder="Nome de Usuário">
-                <input type="password" id="new-pass" placeholder="Senha">
-                <button class="btn-action" style="width:100%" onclick="solicitarCadastro()">SOLICITAR</button>
-                <button class="btn-action" style="width:100%; background:#e2e8f0; color:#475569; margin-top:5px;" onclick="toggleCadastro(false)">CANCELAR</button>
+
+            <div class="login-card hidden" id="form-cadastro">
+                <h2 style="font-size:14px; margin-bottom:15px;">Solicitar Novo Acesso</h2>
+                <label>Nome</label><input type="text" id="new-user">
+                <label>Senha</label><input type="password" id="new-pass">
+                <button class="btn-wp" onclick="solicitarCadastro()">Enviar Pedido</button>
+                <button class="btn-wp" style="background:#646970; margin-top:5px;" onclick="toggleCadastro(false)">Voltar</button>
+            </div>
+            
+            <div style="margin-top:20px; text-align:center;">
+                <a href="index.html" style="text-decoration:none; color:var(--wp-text); font-size:13px;">← Voltar para o site público</a>
             </div>
         </div>
     </div>
 
-    <div class="admin-layout" id="main-panel">
-        <header class="admin-header">
-            <div style="font-weight: 800; color: var(--pm-green);">ADMIN MACHADOS</div>
-            <button onclick="deslogar()" style="background: none; border: none; color: #94a3b8; cursor: pointer; font-weight: 700;">SAIR</button>
-        </header>
+    <div id="painel" class="hidden">
+        <aside class="sidebar">
+            <a href="index.html" class="btn-voltar-sidebar">← Visitar Site</a>
+            <div id="tb" class="sidebar-item active" onclick="aba('b')">Alterar Banner</div>
+            <div id="tl" class="sidebar-item" onclick="aba('l')">Localização</div>
+            <div id="tu" class="sidebar-item" onclick="aba('u')">Gestão de Usuários</div>
+            <div class="sidebar-item" onclick="fazerLogout()" style="color:#f6a9a9; margin-top:auto; border-top:1px solid #444;">✕ Sair</div>
+        </aside>
 
-        <div class="tabs">
-            <div id="tn" class="tab active" onclick="aba('n')">Nova Notícia</div>
-            <div id="tg" class="tab" onclick="aba('g')">Gerenciar Notícias</div>
-            <div id="tc" class="tab" onclick="aba('c')">Compras Diretas</div>
-            <div id="tb" class="tab" onclick="aba('b')">Alterar Banner</div>
-            <div id="tl" class="tab" onclick="aba('l')">Localização</div>
-            <div id="tp" class="tab" onclick="aba('p')">Conteúdo do Menu</div>
-            <div id="tu" class="tab" onclick="aba('u')">Usuários</div>
-        </div>
+        <main class="main-content">
+            <header class="wp-header">
+                <h1>Painel Administrativo</h1>
+                <div class="header-actions">
+                    <a href="http://machados.admin/wp-admin/" target="_blank" class="btn-wp" style="background:#0073aa;">Configurações</a>
+                    <span id="user-info" style="font-size:12px; font-weight:600; color:#646970; background:#e2e4e7; padding:5px 10px; border-radius:4px;"></span>
+                </div>
+            </header>
 
-        <div id="panel-n" class="panel-card active">
-            <h2>Publicar Notícia</h2>
-            <div class="form-group"><label>Título</label><input type="text" id="n-titulo"></div>
-            <div class="form-group"><label>Conteúdo</label><textarea id="n-resumo" rows="5"></textarea></div>
-            <div class="form-group"><label>Imagem</label><input type="file" id="n-img" accept="image/*"></div>
-            <div class="form-group"><label>Link Externo</label><input type="text" id="n-link"></div>
-            <button class="btn-action" onclick="salvarNoticia()">POSTAR</button>
-        </div>
+            <div id="cont-b">
+    <h2>Banners Rotativos (Slideshow)</h2>
+    
+    <div class="wp-card" style="margin-bottom: 15px;">
+        <label style="display:block; margin-bottom:10px;">Banner 1 (Principal):</label>
+        <input type="file" onchange="salvarBannerGaleria(this, 0)">
+    </div>
 
-        <div id="panel-g" class="panel-card">
-            <h2>Gerenciar Notícias</h2>
-            <table>
-                <thead><tr><th>Título</th><th>Ações</th></tr></thead>
-                <tbody id="lista-noticias"></tbody>
-            </table>
-        </div>
+    <div class="wp-card" style="margin-bottom: 15px;">
+        <label style="display:block; margin-bottom:10px;">Banner 2:</label>
+        <input type="file" onchange="salvarBannerGaleria(this, 1)">
+    </div>
 
-        <div id="panel-c" class="panel-card">
-            <h2>Nova Compra Direta</h2>
-            <div class="form-group"><label>Título</label><input type="text" id="c-titulo"></div>
-            <div class="form-group"><label>Descrição</label><textarea id="c-descricao" rows="4"></textarea></div>
-            <div class="form-group"><label>Edital (PDF)</label><input type="file" id="c-pdf" accept="application/pdf"></div>
-            <button class="btn-action" onclick="salvarCompraDireta()">PUBLICAR COMPRA</button>
-            <h2 style="margin-top:40px; border-top: 1px solid #eee; padding-top: 20px;">Publicações Ativas</h2>
-            <table>
-                <thead><tr><th>Título</th><th>Data</th><th>Ações</th></tr></thead>
-                <tbody id="lista-compras-admin"></tbody>
-            </table>
-        </div>
+    <div class="wp-card" style="margin-bottom: 15px;">
+        <label style="display:block; margin-bottom:10px;">Banner 3:</label>
+        <input type="file" onchange="salvarBannerGaleria(this, 2)">
+    </div>
+    
+    <p style="font-size: 0.8rem; color: #666;">* As imagens são salvas automaticamente ao selecionar o arquivo.</p>
+</div>
 
-        <div id="panel-b" class="panel-card">
-            <h2>Banner Principal</h2>
-            <div class="form-group">
-                <label>Preview Atual</label>
-                <img id="previa-banner" style="width: 100%; max-height: 200px; object-fit: cover; border-radius: 15px; display: none;">
-                <p id="sem-banner">Nenhum banner ativo.</p>
+            <div id="cont-l" class="hidden">
+                <h2>Localização (Mapa)</h2>
+                <div class="wp-card">
+                    <label>Cole o código Iframe do Google Maps:</label>
+                    <textarea id="map-url" rows="6" style="width:100%; border:1px solid #ccc; border-radius:4px; padding:10px;"></textarea>
+                    <button class="btn-wp" style="width:auto; margin-top:15px;" onclick="salvarMapa()">Salvar Mapa</button>
+                </div>
             </div>
-            <div class="form-group"><label>Novo Banner</label><input type="file" id="banner-file" accept="image/*"></div>
-            <button class="btn-action" onclick="salvarBanner()">ATUALIZAR</button>
-        </div>
 
-        <div id="panel-l" class="panel-card">
-            <h2>Localização (Iframe)</h2>
-            <div class="form-group"><label>Código Iframe</label><textarea id="mapa-url" rows="4"></textarea></div>
-            <button class="btn-action" onclick="salvarMapa()">ATUALIZAR MAPA</button>
-        </div>
-
-        <div id="panel-p" class="panel-card">
-            <h2>Conteúdo das Páginas</h2>
-            <div class="form-group">
-                <label>Página</label>
-                <select id="p-selecao">
-                    <option value="secretarias">Secretarias</option>
-                    <option value="cidadao">Cidadão</option>
-                    <option value="transparencia">Transparência</option>
-                    <option value="ouvidoria">Ouvidoria</option>
-                </select>
+            <div id="cont-u" class="hidden">
+                <h2>Gestão de Usuários</h2>
+                <div id="area-master-only">
+                    <table>
+                        <thead><tr><th>Nome</th><th>Status</th><th>Ações</th></tr></thead>
+                        <tbody id="lista-usuarios-pendentes"></tbody>
+                    </table>
+                </div>
+                <div id="msg-bloqueio" class="hidden wp-card" style="color:#d32f2f; border-left:4px solid #d32f2f;">
+                    <strong>Acesso Negado:</strong> Apenas o usuário MASTER pode gerenciar permissões.
+                </div>
             </div>
-            <div class="form-group"><label>Texto</label><textarea id="p-texto" rows="8"></textarea></div>
-            <div class="form-group"><label>Link Externo</label><input type="text" id="p-link"></div>
-            <button class="btn-action" onclick="salvarPaginaMenu()">SALVAR</button>
-        </div>
-
-        <div id="panel-u" class="panel-card">
-            </div>
+			
+        </main>
     </div>
 
     <script>
-        let editandoIndex = null;
-
-        // --- SISTEMA DE LOGIN ---
         window.onload = function() {
-            if (sessionStorage.getItem('logado') === 'true') logarSucesso();
+            const status = localStorage.getItem('admin_logado');
+            if (status) exibirPainel(status);
         };
 
-        function validarLogin() {
-            const u = document.getElementById('user').value.trim();
-            const p = document.getElementById('pass').value.trim();
+        function logar() {
+            const u = document.getElementById('uIn').value;
+            const p = document.getElementById('pIn').value;
             const usuarios = JSON.parse(localStorage.getItem('db_usuarios')) || [];
 
             if (u === "master" && p === "1012") {
-                logarSucesso();
+                localStorage.setItem('admin_logado', 'master');
+                exibirPainel('master');
             } else {
-                const found = usuarios.find(user => user.username === u && user.password === p);
-                if (found && found.aprovado) logarSucesso();
-                else alert("Acesso negado ou pendente de aprovação.");
+                const user = usuarios.find(x => x.nome === u && x.pass === p);
+                if (user) {
+                    if (user.aprovado) {
+                        localStorage.setItem('admin_logado', 'editor');
+                        exibirPainel('editor');
+                    } else { alert("Aguarde a aprovação do Master."); }
+                } else { alert("Login inválido."); }
             }
         }
 
-        function logarSucesso() {
-            sessionStorage.setItem('logado', 'true');
-            document.getElementById('login-overlay').style.display = 'none';
-            document.getElementById('main-panel').style.display = 'block';
-            renderNoticias();
-            renderizarUsuarios();
-            renderizarComprasAdmin();
-            carregarPrevias();
-        }
-
-        function deslogar() {
-            sessionStorage.removeItem('logado');
-            location.reload();
-        }
-
-        function toggleCadastro(show) {
-            document.getElementById('form-login').style.display = show ? 'none' : 'block';
-            document.getElementById('form-cadastro').style.display = show ? 'block' : 'none';
+        function exibirPainel(tipo) {
+            document.getElementById('login-screen').classList.add('hidden');
+            document.getElementById('painel').classList.remove('hidden');
+            document.getElementById('user-info').innerText = "USUÁRIO: " + tipo.toUpperCase();
+            
+            if (tipo === 'editor') {
+                document.getElementById('area-master-only').classList.add('hidden');
+                document.getElementById('msg-bloqueio').classList.remove('hidden');
+            }
+            carregarDados();
         }
 
         function solicitarCadastro() {
-            const user = document.getElementById('new-user').value.trim();
-            const pass = document.getElementById('new-pass').value.trim();
-            if (!user || !pass) return alert("Preencha tudo.");
-            const usuarios = JSON.parse(localStorage.getItem('db_usuarios')) || [];
-            usuarios.push({ username: user, password: pass, aprovado: false });
-            localStorage.setItem('db_usuarios', JSON.stringify(usuarios));
-            alert("Solicitação enviada!");
+            const nome = document.getElementById('new-user').value;
+            const pass = document.getElementById('new-pass').value;
+            if(!nome || !pass) return alert("Preencha tudo.");
+            let u = JSON.parse(localStorage.getItem('db_usuarios')) || [];
+            u.push({ nome, pass, aprovado: false });
+            localStorage.setItem('db_usuarios', JSON.stringify(u));
+            alert("Pedido enviado ao Master!");
             toggleCadastro(false);
         }
 
-        // --- NAVEGAÇÃO ---
-        function aba(id) {
-            document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
-            document.querySelectorAll('.panel-card').forEach(p => p.classList.remove('active'));
-            document.getElementById('t' + id).classList.add('active');
-            document.getElementById('panel-' + id).classList.add('active');
-        }
-
-        // --- NOTÍCIAS ---
-        function salvarNoticia() {
-            const file = document.getElementById('n-img').files[0];
-            const titulo = document.getElementById('n-titulo').value;
-            const resumo = document.getElementById('n-resumo').value;
-            if (!titulo || !resumo) return alert("Preencha os campos.");
-
-            const save = (img) => {
-                const banco = JSON.parse(localStorage.getItem('db_noticias')) || [];
-                const doc = { titulo, resumo, imagem: img, linkBtn: document.getElementById('n-link').value, data: new Date().toLocaleDateString('pt-BR') };
-                if (editandoIndex !== null) banco[editandoIndex] = doc;
-                else banco.unshift(doc);
-                localStorage.setItem('db_noticias', JSON.stringify(banco));
-                location.reload();
-            };
-
-            if (file) {
-                const reader = new FileReader();
-                reader.onload = (e) => save(e.target.result);
-                reader.readAsDataURL(file);
-            } else save(null);
-        }
-
-        function renderNoticias() {
-            const lista = document.getElementById('lista-noticias');
-            const noticias = JSON.parse(localStorage.getItem('db_noticias')) || [];
-            lista.innerHTML = noticias.map((n, i) => `
-                <tr>
-                    <td>${n.titulo}</td>
-                    <td>
-                        <button onclick="prepararEdicao(${i})" style="color:var(--pm-blue); cursor:pointer; border:none; background:none; font-weight:800;">EDITAR</button>
-                        <button onclick="excluirNoticia(${i})" style="color:red; cursor:pointer; border:none; background:none; font-weight:800;">EXCLUIR</button>
-                    </td>
-                </tr>`).join('');
-        }
-
-        function excluirNoticia(i) {
-            const n = JSON.parse(localStorage.getItem('db_noticias'));
-            n.splice(i, 1);
-            localStorage.setItem('db_noticias', JSON.stringify(n));
-            renderNoticias();
-        }
-
-        function prepararEdicao(i) {
-            const n = JSON.parse(localStorage.getItem('db_noticias'))[i];
-            document.getElementById('n-titulo').value = n.titulo;
-            document.getElementById('n-resumo').value = n.resumo;
-            editandoIndex = i;
-            aba('n');
-        }
-
-        // --- COMPRAS DIRETAS ---
-        function salvarCompraDireta() {
-            const titulo = document.getElementById('c-titulo').value;
-            const file = document.getElementById('c-pdf').files[0];
-            if (!titulo || !file) return alert("Título e PDF são obrigatórios.");
-
-            const reader = new FileReader();
-            reader.onload = (e) => {
-                const compras = JSON.parse(localStorage.getItem('db_compras_diretas')) || [];
-                compras.unshift({ titulo, descricao: document.getElementById('c-descricao').value, pdf: e.target.result, data: new Date().toLocaleDateString('pt-BR') });
-                localStorage.setItem('db_compras_diretas', JSON.stringify(compras));
-                alert("Publicado!");
-                location.reload();
-            };
-            reader.readAsDataURL(file);
-        }
-
-        function renderizarComprasAdmin() {
-            const lista = document.getElementById('lista-compras-admin');
-            const compras = JSON.parse(localStorage.getItem('db_compras_diretas')) || [];
-            lista.innerHTML = compras.map((c, i) => `
-                <tr>
-                    <td>${c.titulo}</td>
-                    <td>${c.data}</td>
-                    <td><button onclick="excluirCompra(${i})" style="color:red; font-weight:800; border:none; background:none; cursor:pointer;">EXCLUIR</button></td>
-                </tr>`).join('');
-        }
-
-        function excluirCompra(i) {
-            const c = JSON.parse(localStorage.getItem('db_compras_diretas'));
-            c.splice(i, 1);
-            localStorage.setItem('db_compras_diretas', JSON.stringify(c));
-            renderizarComprasAdmin();
-        }
-
-        // --- USUÁRIOS ---
-        function renderizarUsuarios() {
+        function renderUsuarios() {
+            const lista = document.getElementById('lista-usuarios-pendentes');
+            if(!lista) return;
             const usuarios = JSON.parse(localStorage.getItem('db_usuarios')) || [];
-            document.getElementById('panel-u').innerHTML = `
-                <h2>Usuários</h2>
-                <table>
-                    <thead><tr><th>Nome</th><th>Status</th><th>Ações</th></tr></thead>
-                    <tbody>${usuarios.map((u, i) => `
-                        <tr>
-                            <td>${u.username}</td>
-                            <td>${u.aprovado ? 'Ativo' : 'Pendente'}</td>
-                            <td>
-                                ${!u.aprovado ? `<button onclick="aprovarU(${i})" style="color:green; font-weight:800; border:none; background:none; cursor:pointer;">APROVAR</button>` : ''}
-                                <button onclick="excluirU(${i})" style="color:red; font-weight:800; border:none; background:none; cursor:pointer;">EXCLUIR</button>
-                            </td>
-                        </tr>`).join('')}
-                    </tbody>
-                </table>`;
+            lista.innerHTML = "";
+            usuarios.forEach((u, i) => {
+                lista.innerHTML += `<tr><td>${u.nome}</td><td>${u.aprovado ? 'Ativo' : 'Pendente'}</td>
+                <td>${!u.aprovado ? `<button class="btn-small btn-approve" onclick="aprovar(${i})">Aprovar</button>` : ''}
+                <button class="btn-small btn-delete" onclick="remover(${i})">Excluir</button></td></tr>`;
+            });
         }
 
-        function aprovarU(i) {
-            const u = JSON.parse(localStorage.getItem('db_usuarios'));
+        function aprovar(i) {
+            let u = JSON.parse(localStorage.getItem('db_usuarios'));
             u[i].aprovado = true;
             localStorage.setItem('db_usuarios', JSON.stringify(u));
-            renderizarUsuarios();
+            renderUsuarios();
         }
 
-        function excluirU(i) {
-            const u = JSON.parse(localStorage.getItem('db_usuarios'));
-            u.splice(i, 1);
-            localStorage.setItem('db_usuarios', JSON.stringify(u));
-            renderizarUsuarios();
-        }
-
-        // --- OUTROS ---
-        function carregarPrevias() {
-            const b = localStorage.getItem('db_banner_site');
-            if (b) {
-                document.getElementById('previa-banner').src = b;
-                document.getElementById('previa-banner').style.display = "block";
-                document.getElementById('sem-banner').style.display = "none";
+        function remover(i) {
+            if(confirm("Excluir usuário?")){
+                let u = JSON.parse(localStorage.getItem('db_usuarios'));
+                u.splice(i, 1);
+                localStorage.setItem('db_usuarios', JSON.stringify(u));
+                renderUsuarios();
             }
-            document.getElementById('mapa-url').value = localStorage.getItem('db_mapa_url') || "";
         }
 
-        function salvarBanner() {
-            const file = document.getElementById('banner-file').files[0];
-            if (!file) return;
-            const reader = new FileReader();
-            reader.onload = (e) => {
-                localStorage.setItem('db_banner_site', e.target.result);
-                location.reload();
-            };
-            reader.readAsDataURL(file);
+        function aba(id) {
+            ['b', 'l', 'u', 'p'].forEach(i => {
+                const el = document.getElementById('cont-'+i);
+                if(el) el.classList.add('hidden');
+                const menu = document.getElementById('t'+i);
+                if(menu) menu.classList.remove('active');
+            });
+            document.getElementById('cont-'+id).classList.remove('hidden');
+            const activeMenu = document.getElementById('t'+id);
+            if(activeMenu) activeMenu.classList.add('active');
+            if(id === 'u') renderUsuarios();
         }
 
-        function salvarMapa() {
-            localStorage.setItem('db_mapa_url', document.getElementById('mapa-url').value);
-            alert("Mapa Atualizado!");
+        function salvarMapa() { localStorage.setItem('db_mapa_url', document.getElementById('map-url').value); alert("Mapa atualizado!"); }
+        function salvarSky() { localStorage.setItem('db_sky', JSON.stringify({nome: document.getElementById('s-nome').value})); alert("Sky Collab atualizada!"); }
+		
+        function salvarBannerGaleria(input, index) {
+    if (input.files && input.files[0]) {
+        const reader = new FileReader();
+        
+        reader.onload = function(e) {
+            const novaImagem = e.target.result; // A imagem em formato de código
+            
+            // Pega a lista que já existe ou cria uma vazia
+            let listaBanners = JSON.parse(localStorage.getItem('db_banners_rotativos')) || [];
+            
+            // Coloca a nova imagem na posição correta (0, 1 ou 2)
+            listaBanners[index] = novaImagem;
+            
+            // Salva de volta no navegador
+            localStorage.setItem('db_banners_rotativos', JSON.stringify(listaBanners));
+            
+            alert("Banner " + (index + 1) + " atualizado!");
+        };
+        
+        reader.readAsDataURL(input.files[0]);
+    }
+	
+	
+	
+}
+        function toggleCadastro(s) {
+            document.getElementById('form-login').classList.toggle('hidden', s);
+            document.getElementById('form-cadastro').classList.toggle('hidden', !s);
         }
-
-        function salvarPaginaMenu() {
-            const id = document.getElementById('p-selecao').value;
-            const paginas = JSON.parse(localStorage.getItem('db_paginas_menu')) || {};
-            paginas[id] = { titulo: document.getElementById('p-selecao').selectedOptions[0].text, texto: document.getElementById('p-texto').value, linkExterno: document.getElementById('p-link').value };
-            localStorage.setItem('db_paginas_menu', JSON.stringify(paginas));
-            alert("Salvo!");
-        }
+        function fazerLogout() { localStorage.removeItem('admin_logado'); location.reload(); }
     </script>
 </body>
 </html>
