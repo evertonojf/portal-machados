@@ -1,707 +1,85 @@
 <!DOCTYPE html>
-<html lang="pt-BR">
+<html lang="pt-br">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Painel Administrativo - Sky Tecnologia</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600;700&display=swap" rel="stylesheet">
-  <style>
-    :root {
-      --wp-bg: #f0f0f1;
-      --wp-sidebar: #2c3338;
-      --wp-blue: #2271b1;
-      --wp-blue-hover: #135e96;
-      --wp-border: #c3c4c7;
-      --wp-text: #3c434a;
-      --wp-danger: #d63638;
-      --wp-success: #00a32a;
-      --wp-warning: #996800;
-    }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    * { box-sizing: border-box; margin: 0; padding: 0; }
-    body { font-family: 'Open Sans', sans-serif; background-color: var(--wp-bg); color: var(--wp-text); }
-    .hidden { display: none !important; }
+<title>Painel</title>
 
-    #login-screen {
-      min-height: 100vh;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      background: var(--wp-bg);
-      padding: 20px;
-    }
-
-    .login-wrapper { width: 100%; max-width: 360px; }
-    .login-logo { text-align: center; margin-bottom: 25px; }
-    .login-logo img { max-width: 150px; margin: 0 auto; filter: drop-shadow(0 2px 4px rgba(0,0,0,0.1)); }
-
-    .login-card {
-      background: #ffffff;
-      padding: 26px 24px 34px;
-      border: 1px solid var(--wp-border);
-      box-shadow: 0 1px 3px rgba(0,0,0,0.04);
-    }
-
-    .login-card h2 { font-size: 16px; margin-bottom: 15px; }
-    .login-card label { display: block; font-size: 14px; margin-bottom: 5px; font-weight: 600; }
-    .login-card input,
-    .login-card textarea,
-    .login-card select {
-      width: 100%;
-      padding: 10px;
-      margin-bottom: 15px;
-      border: 1px solid #8c8f94;
-      border-radius: 4px;
-      font-size: 15px;
-      font-family: inherit;
-    }
-
-    .btn-wp {
-      background: var(--wp-blue);
-      color: white;
-      border: none;
-      padding: 10px 15px;
-      border-radius: 4px;
-      cursor: pointer;
-      font-weight: 600;
-      font-size: 14px;
-      text-decoration: none;
-      display: inline-block;
-      text-align: center;
-      transition: background 0.2s ease;
-    }
-
-    .btn-wp:hover { background: var(--wp-blue-hover); }
-    .btn-wp.full { width: 100%; }
-    .btn-wp.secondary { background: #646970; }
-    .btn-wp.secondary:hover { background: #50575e; }
-    .btn-wp.danger { background: var(--wp-danger); }
-    .btn-wp.danger:hover { background: #b32d2e; }
-
-    .helper-text { font-size: 12px; color: #646970; line-height: 1.5; }
-
-    #painel { display: flex; min-height: 100vh; }
-
-    .sidebar {
-      width: 220px;
-      background: var(--wp-sidebar);
-      color: white;
-      position: fixed;
-      height: 100%;
-      display: flex;
-      flex-direction: column;
-    }
-
-    .sidebar-item {
-      padding: 12px 15px;
-      cursor: pointer;
-      font-size: 13px;
-      border: none;
-      background: transparent;
-      color: inherit;
-      text-align: left;
-      border-bottom: 1px solid rgba(255,255,255,0.05);
-    }
-
-    .sidebar-item:hover,
-    .sidebar-item.active { background: var(--wp-blue); }
-
-    .btn-voltar-sidebar {
-      display: block;
-      text-decoration: none;
-      color: #a7aaad;
-      font-size: 12px;
-      padding: 15px;
-      border-bottom: 1px solid #444;
-      margin-bottom: 10px;
-    }
-
-    .btn-voltar-sidebar:hover { color: white; background: rgba(255,255,255,0.05); }
-
-    .main-content {
-      margin-left: 220px;
-      flex: 1;
-      padding: 20px 40px;
-    }
-
-    .wp-header {
-      margin-bottom: 30px;
-      border-bottom: 1px solid var(--wp-border);
-      padding-bottom: 15px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      gap: 20px;
-      flex-wrap: wrap;
-    }
-
-    .wp-header h1 { font-size: 23px; font-weight: 400; }
-    .header-actions { display: flex; align-items: center; gap: 15px; flex-wrap: wrap; }
-
-    .wp-card {
-      background: white;
-      border: 1px solid var(--wp-border);
-      padding: 20px;
-      margin-bottom: 20px;
-      border-radius: 6px;
-    }
-
-    .status-box {
-      border-left: 4px solid var(--wp-blue);
-      background: #fff;
-      padding: 14px 16px;
-      margin-bottom: 16px;
-      font-size: 13px;
-      line-height: 1.5;
-    }
-
-    .status-box.warn { border-left-color: var(--wp-warning); }
-    .status-box.success { border-left-color: var(--wp-success); }
-    .status-box.error { border-left-color: var(--wp-danger); }
-
-    table {
-      width: 100%;
-      border-collapse: collapse;
-      background: white;
-      border: 1px solid var(--wp-border);
-    }
-
-    th {
-      text-align: left;
-      padding: 10px;
-      background: #f6f7f7;
-      font-size: 12px;
-      border-bottom: 1px solid var(--wp-border);
-    }
-
-    td {
-      padding: 10px;
-      border-bottom: 1px solid #f0f0f1;
-      font-size: 13px;
-      vertical-align: top;
-    }
-
-    .btn-small {
-      padding: 6px 10px;
-      border-radius: 3px;
-      border: 1px solid;
-      cursor: pointer;
-      font-size: 11px;
-      font-weight: 600;
-      margin-right: 6px;
-      margin-bottom: 4px;
-    }
-
-    .btn-approve { background: #edffef; border-color: #4caf50; color: #2e7d32; }
-    .btn-delete { background: #fff5f5; border-color: #f44336; color: #d32f2f; }
-
-    .banner-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-      gap: 16px;
-    }
-
-    .banner-slot label { display: block; margin-bottom: 8px; font-weight: 600; }
-    .banner-preview {
-      width: 100%;
-      aspect-ratio: 16/9;
-      border: 1px dashed var(--wp-border);
-      border-radius: 8px;
-      background: #f6f7f7 center/cover no-repeat;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      color: #646970;
-      font-size: 12px;
-      margin-bottom: 10px;
-      overflow: hidden;
-      text-align: center;
-      padding: 8px;
-    }
-
-    .toolbar-inline {
-      display: flex;
-      gap: 10px;
-      flex-wrap: wrap;
-      align-items: center;
-    }
-
-    @media (max-width: 900px) {
-      .sidebar { position: static; width: 100%; height: auto; }
-      #painel { flex-direction: column; }
-      .main-content { margin-left: 0; padding: 20px; }
-    }
-  </style>
+<style>
+body{margin:0;font-family:Arial;background:#f0f0f1}
+.login{height:100vh;display:flex;justify-content:center;align-items:center}
+.card{background:#fff;padding:20px;border:1px solid #ccc;width:300px}
+input{width:100%;padding:10px;margin-bottom:10px}
+button{padding:10px;width:100%;background:#0073aa;color:#fff;border:none;cursor:pointer}
+.painel{display:none;padding:20px}
+</style>
 </head>
+
 <body>
-  <div id="login-screen">
-    <div class="login-wrapper">
-      <div class="login-logo"><img src="logo.png" alt="Logo da Prefeitura"></div>
 
-      <div class="status-box warn">
-        Este painel continua usando <strong>localStorage</strong> para teste local. Isso melhora a sincronização com o portal público no mesmo navegador, mas não substitui banco de dados real em produção.
-      </div>
+<div class="login" id="login">
+    <div class="card">
+        <img src="img/logo.png" style="width:100%;margin-bottom:15px">
 
-      <div class="login-card" id="form-login">
-        <h2>Acesso ao Painel</h2>
-        <label for="uIn">Usuário</label>
-        <input type="text" id="uIn" autocomplete="username">
+        <input id="user" placeholder="Usuário">
+        <input id="pass" type="password" placeholder="Senha">
 
-        <label for="pIn">Senha</label>
-        <input type="password" id="pIn" autocomplete="current-password">
-
-        <button class="btn-wp full" type="button" id="btn-login">Acessar Painel</button>
-        <p style="text-align:center; margin-top:15px; font-size:12px;">
-          <a href="#" id="link-cadastro" style="color:var(--wp-blue); text-decoration:none;">Solicitar acesso</a>
-        </p>
-      </div>
-
-      <div class="login-card hidden" id="form-cadastro">
-        <h2>Solicitar Novo Acesso</h2>
-        <label for="new-user">Nome</label>
-        <input type="text" id="new-user" autocomplete="off">
-
-        <label for="new-pass">Senha</label>
-        <input type="password" id="new-pass" autocomplete="new-password">
-
-        <button class="btn-wp full" type="button" id="btn-cadastro">Enviar Pedido</button>
-        <button class="btn-wp full secondary" type="button" id="btn-voltar-cadastro" style="margin-top:5px;">Voltar</button>
-      </div>
-
-      <div style="margin-top:20px; text-align:center;">
-        <a href="index.html" style="text-decoration:none; color:var(--wp-text); font-size:13px;">← Voltar para o site público</a>
-      </div>
+        <button onclick="logar()">Entrar</button>
     </div>
-  </div>
+</div>
+
+<div class="painel" id="painel">
+    <h2>Painel</h2>
+
+    <input type="file" onchange="salvarBanner(this)">
+    <button onclick="limparBanner()">Limpar Banner</button>
+
+    <br><br>
+
+    <textarea id="mapa" placeholder="Cole iframe do mapa"></textarea>
+    <button onclick="salvarMapa()">Salvar mapa</button>
+
+    <br><br>
+    <button onclick="logout()">Sair</button>
+</div>
+
+<script>
+function logar(){
+    let u = document.getElementById('user').value
+    let p = document.getElementById('pass').value
+
+    if(u=="master" && p=="1012"){
+        document.getElementById('login').style.display="none"
+        document.getElementById('painel').style.display="block"
+    }else{
+        alert("Login inválido")
+    }
+}
+
+function salvarBanner(input){
+    let reader = new FileReader()
+    reader.onload = function(e){
+        localStorage.setItem('db_banners_rotativos', JSON.stringify([e.target.result]))
+        alert("Banner salvo")
+    }
+    reader.readAsDataURL(input.files[0])
+}
+
+function limparBanner(){
+    localStorage.removeItem('db_banners_rotativos')
+    alert("Removido")
+}
+
+function salvarMapa(){
+    localStorage.setItem('db_mapa_url', document.getElementById('mapa').value)
+    alert("Mapa salvo")
+}
+
+function logout(){
+    location.reload()
+}
+</script>
 
-  <div id="painel" class="hidden">
-    <aside class="sidebar">
-      <a href="index.html" class="btn-voltar-sidebar">← Visitar Site</a>
-      <button id="tb" class="sidebar-item active" type="button" data-tab="b">Alterar Banner</button>
-      <button id="tl" class="sidebar-item" type="button" data-tab="l">Localização</button>
-      <button id="tu" class="sidebar-item" type="button" data-tab="u">Gestão de Usuários</button>
-      <button class="sidebar-item" type="button" id="btn-logout" style="color:#f6a9a9; margin-top:auto; border-top:1px solid #444;">✕ Sair</button>
-    </aside>
-
-    <main class="main-content">
-      <header class="wp-header">
-        <h1>Painel Administrativo</h1>
-        <div class="header-actions">
-          <a href="https://machados.pe.gov.br/wp-admin/" target="_blank" rel="noopener noreferrer" class="btn-wp">Configurações</a>
-          <span id="user-info" style="font-size:12px; font-weight:600; color:#646970; background:#e2e4e7; padding:5px 10px; border-radius:4px;"></span>
-        </div>
-      </header>
-
-      <div id="painel-status" class="status-box success">
-        Painel carregado. Sempre que você salvar banners ou mapa, o portal público corrigido lerá as mesmas chaves do armazenamento local.
-      </div>
-
-      <section id="cont-b">
-        <div class="wp-card">
-          <h2 style="margin-bottom:12px;">Banners Rotativos (Slideshow)</h2>
-          <p class="helper-text" style="margin-bottom:18px;">O portal público lê os banners salvos em <strong>db_banners_rotativos</strong>. O ideal é usar imagens leves e na mesma proporção.</p>
-
-          <div class="banner-grid">
-            <div class="banner-slot">
-              <label for="banner-0">Banner 1 (Principal)</label>
-              <div class="banner-preview" id="preview-banner-0">Sem imagem</div>
-              <input type="file" id="banner-0" accept="image/*" data-banner-index="0">
-            </div>
-            <div class="banner-slot">
-              <label for="banner-1">Banner 2</label>
-              <div class="banner-preview" id="preview-banner-1">Sem imagem</div>
-              <input type="file" id="banner-1" accept="image/*" data-banner-index="1">
-            </div>
-            <div class="banner-slot">
-              <label for="banner-2">Banner 3</label>
-              <div class="banner-preview" id="preview-banner-2">Sem imagem</div>
-              <input type="file" id="banner-2" accept="image/*" data-banner-index="2">
-            </div>
-          </div>
-
-          <div class="toolbar-inline" style="margin-top:16px;">
-            <button class="btn-wp danger" type="button" id="btn-limpar-banners">Limpar banners</button>
-          </div>
-        </div>
-      </section>
-
-      <section id="cont-l" class="hidden">
-        <div class="wp-card">
-          <h2 style="margin-bottom:12px;">Localização (Mapa)</h2>
-          <label for="map-url">Cole o iframe do Google Maps</label>
-          <textarea id="map-url" rows="6" placeholder="Cole aqui o código completo do iframe do Google Maps"></textarea>
-          <div class="toolbar-inline">
-            <button class="btn-wp" type="button" id="btn-salvar-mapa">Salvar mapa</button>
-            <button class="btn-wp secondary" type="button" id="btn-limpar-mapa">Limpar mapa</button>
-          </div>
-          <p class="helper-text" style="margin-top:10px;">O portal público corrigido valida se o conteúdo salvo parece um iframe do Google Maps antes de exibir.</p>
-        </div>
-      </section>
-
-      <section id="cont-u" class="hidden">
-        <h2 style="margin-bottom:15px;">Gestão de Usuários</h2>
-        <div id="area-master-only">
-          <table>
-            <thead>
-              <tr>
-                <th>Nome</th>
-                <th>Status</th>
-                <th>Ações</th>
-              </tr>
-            </thead>
-            <tbody id="lista-usuarios-pendentes"></tbody>
-          </table>
-        </div>
-        <div id="msg-bloqueio" class="hidden wp-card" style="color:#d32f2f; border-left:4px solid #d32f2f;">
-          <strong>Acesso negado:</strong> apenas o usuário MASTER pode gerenciar permissões.
-        </div>
-      </section>
-    </main>
-  </div>
-
-  <script>
-    (() => {
-      'use strict';
-
-      const STORAGE_KEYS = {
-        loggedUser: 'admin_logado',
-        users: 'db_usuarios',
-        banners: 'db_banners_rotativos',
-        map: 'db_mapa_url',
-        masterUser: 'admin_master_user'
-      };
-
-      const MASTER_DEFAULT = { nome: 'master', pass: '1012', role: 'master', aprovado: true };
-
-      const els = {
-        loginScreen: document.getElementById('login-screen'),
-        painel: document.getElementById('painel'),
-        formLogin: document.getElementById('form-login'),
-        formCadastro: document.getElementById('form-cadastro'),
-        userInfo: document.getElementById('user-info'),
-        listaUsuarios: document.getElementById('lista-usuarios-pendentes'),
-        areaMasterOnly: document.getElementById('area-master-only'),
-        msgBloqueio: document.getElementById('msg-bloqueio'),
-        painelStatus: document.getElementById('painel-status'),
-        mapUrl: document.getElementById('map-url')
-      };
-
-      function safeJsonParse(value, fallback) {
-        if (!value) return fallback;
-        try { return JSON.parse(value); } catch { return fallback; }
-      }
-
-      function setStatus(message, type = 'success') {
-        els.painelStatus.className = `status-box ${type}`;
-        els.painelStatus.innerHTML = message;
-      }
-
-      function seedMasterUser() {
-        const currentMaster = safeJsonParse(localStorage.getItem(STORAGE_KEYS.masterUser), null);
-        if (!currentMaster || !currentMaster.nome || !currentMaster.pass) {
-          localStorage.setItem(STORAGE_KEYS.masterUser, JSON.stringify(MASTER_DEFAULT));
-        }
-      }
-
-      function getMasterUser() {
-        return safeJsonParse(localStorage.getItem(STORAGE_KEYS.masterUser), MASTER_DEFAULT);
-      }
-
-      function getUsers() {
-        return safeJsonParse(localStorage.getItem(STORAGE_KEYS.users), []);
-      }
-
-      function setUsers(users) {
-        localStorage.setItem(STORAGE_KEYS.users, JSON.stringify(users));
-      }
-
-      function getBanners() {
-        return safeJsonParse(localStorage.getItem(STORAGE_KEYS.banners), []);
-      }
-
-      function setBanners(banners) {
-        localStorage.setItem(STORAGE_KEYS.banners, JSON.stringify(banners));
-      }
-
-      function carregarDados() {
-        carregarMapaExistente();
-        renderBannerPreviews();
-        renderUsuarios();
-      }
-
-      function toggleCadastro(showCadastro) {
-        els.formLogin.classList.toggle('hidden', showCadastro);
-        els.formCadastro.classList.toggle('hidden', !showCadastro);
-      }
-
-      function exibirPainel(tipo) {
-        els.loginScreen.classList.add('hidden');
-        els.painel.classList.remove('hidden');
-        els.userInfo.innerText = `USUÁRIO: ${tipo.toUpperCase()}`;
-
-        if (tipo === 'editor') {
-          els.areaMasterOnly.classList.add('hidden');
-          els.msgBloqueio.classList.remove('hidden');
-        } else {
-          els.areaMasterOnly.classList.remove('hidden');
-          els.msgBloqueio.classList.add('hidden');
-        }
-
-        carregarDados();
-      }
-
-      function logar() {
-        const u = document.getElementById('uIn').value.trim();
-        const p = document.getElementById('pIn').value;
-        const usuarios = getUsers();
-        const master = getMasterUser();
-
-        if (!u || !p) {
-          alert('Informe usuário e senha.');
-          return;
-        }
-
-        if (u === master.nome && p === master.pass) {
-          localStorage.setItem(STORAGE_KEYS.loggedUser, 'master');
-          exibirPainel('master');
-          return;
-        }
-
-        const user = usuarios.find(item => item.nome === u && item.pass === p);
-        if (!user) {
-          alert('Login inválido.');
-          return;
-        }
-
-        if (!user.aprovado) {
-          alert('Aguarde a aprovação do MASTER.');
-          return;
-        }
-
-        localStorage.setItem(STORAGE_KEYS.loggedUser, 'editor');
-        exibirPainel('editor');
-      }
-
-      function solicitarCadastro() {
-        const nome = document.getElementById('new-user').value.trim();
-        const pass = document.getElementById('new-pass').value;
-
-        if (!nome || !pass) {
-          alert('Preencha todos os campos.');
-          return;
-        }
-
-        const usuarios = getUsers();
-        const jaExiste = usuarios.some(user => user.nome.toLowerCase() === nome.toLowerCase()) || getMasterUser().nome.toLowerCase() === nome.toLowerCase();
-        if (jaExiste) {
-          alert('Já existe um usuário com esse nome.');
-          return;
-        }
-
-        usuarios.push({ nome, pass, aprovado: false, role: 'editor' });
-        setUsers(usuarios);
-        alert('Pedido enviado ao MASTER.');
-        document.getElementById('new-user').value = '';
-        document.getElementById('new-pass').value = '';
-        toggleCadastro(false);
-      }
-
-      function renderUsuarios() {
-        if (!els.listaUsuarios) return;
-        const usuarios = getUsers();
-        els.listaUsuarios.innerHTML = '';
-
-        if (!usuarios.length) {
-          els.listaUsuarios.innerHTML = '<tr><td colspan="3">Nenhum usuário cadastrado.</td></tr>';
-          return;
-        }
-
-        usuarios.forEach((user, index) => {
-          const tr = document.createElement('tr');
-          tr.innerHTML = `
-            <td>${user.nome}</td>
-            <td>${user.aprovado ? 'Ativo' : 'Pendente'}</td>
-            <td>
-              ${!user.aprovado ? `<button class="btn-small btn-approve" type="button" data-approve="${index}">Aprovar</button>` : ''}
-              <button class="btn-small btn-delete" type="button" data-remove="${index}">Excluir</button>
-            </td>
-          `;
-          els.listaUsuarios.appendChild(tr);
-        });
-      }
-
-      function aprovar(index) {
-        const usuarios = getUsers();
-        if (!usuarios[index]) return;
-        usuarios[index].aprovado = true;
-        setUsers(usuarios);
-        renderUsuarios();
-        setStatus('Usuário aprovado com sucesso.', 'success');
-      }
-
-      function remover(index) {
-        const usuarios = getUsers();
-        if (!usuarios[index]) return;
-        if (!confirm(`Excluir o usuário ${usuarios[index].nome}?`)) return;
-        usuarios.splice(index, 1);
-        setUsers(usuarios);
-        renderUsuarios();
-        setStatus('Usuário removido com sucesso.', 'success');
-      }
-
-      function aba(id) {
-        ['b', 'l', 'u'].forEach(tabId => {
-          document.getElementById(`cont-${tabId}`)?.classList.add('hidden');
-          document.getElementById(`t${tabId}`)?.classList.remove('active');
-        });
-
-        document.getElementById(`cont-${id}`)?.classList.remove('hidden');
-        document.getElementById(`t${id}`)?.classList.add('active');
-
-        if (id === 'u') renderUsuarios();
-      }
-
-      function carregarMapaExistente() {
-        els.mapUrl.value = localStorage.getItem(STORAGE_KEYS.map) || '';
-      }
-
-      function salvarMapa() {
-        const value = els.mapUrl.value.trim();
-        if (!value) {
-          alert('Cole um iframe válido ou use limpar mapa.');
-          return;
-        }
-
-        if (!/^<iframe[\s\S]*<\/iframe>$/i.test(value) || !/google\.com\/maps|google\.com\/maps\/embed/i.test(value)) {
-          alert('O conteúdo informado não parece ser um iframe válido do Google Maps.');
-          return;
-        }
-
-        localStorage.setItem(STORAGE_KEYS.map, value);
-        setStatus('Mapa salvo. O portal público corrigido já consegue ler esse conteúdo.', 'success');
-      }
-
-      function limparMapa() {
-        if (!confirm('Remover o mapa salvo?')) return;
-        localStorage.removeItem(STORAGE_KEYS.map);
-        els.mapUrl.value = '';
-        setStatus('Mapa removido com sucesso.', 'success');
-      }
-
-      function salvarBannerGaleria(input, index) {
-        const file = input.files?.[0];
-        if (!file) return;
-
-        if (!file.type.startsWith('image/')) {
-          alert('Selecione um arquivo de imagem válido.');
-          input.value = '';
-          return;
-        }
-
-        const reader = new FileReader();
-        reader.onload = function(event) {
-          const banners = getBanners();
-          banners[index] = event.target.result;
-          setBanners(banners);
-          renderBannerPreviews();
-          setStatus(`Banner ${index + 1} atualizado.`, 'success');
-        };
-        reader.readAsDataURL(file);
-      }
-
-      function renderBannerPreviews() {
-        const banners = getBanners();
-        [0, 1, 2].forEach(index => {
-          const preview = document.getElementById(`preview-banner-${index}`);
-          const image = banners[index];
-          if (!preview) return;
-
-          if (image) {
-            preview.style.backgroundImage = `url('${image}')`;
-            preview.textContent = '';
-          } else {
-            preview.style.backgroundImage = 'none';
-            preview.textContent = 'Sem imagem';
-          }
-        });
-      }
-
-      function limparBanners() {
-        if (!confirm('Remover todos os banners cadastrados?')) return;
-        localStorage.removeItem(STORAGE_KEYS.banners);
-        document.querySelectorAll('input[type="file"][data-banner-index]').forEach(input => input.value = '');
-        renderBannerPreviews();
-        setStatus('Todos os banners foram removidos.', 'success');
-      }
-
-      function fazerLogout() {
-        localStorage.removeItem(STORAGE_KEYS.loggedUser);
-        window.location.reload();
-      }
-
-      function bindEvents() {
-        document.getElementById('btn-login').addEventListener('click', logar);
-        document.getElementById('link-cadastro').addEventListener('click', (event) => {
-          event.preventDefault();
-          toggleCadastro(true);
-        });
-        document.getElementById('btn-cadastro').addEventListener('click', solicitarCadastro);
-        document.getElementById('btn-voltar-cadastro').addEventListener('click', () => toggleCadastro(false));
-        document.getElementById('btn-logout').addEventListener('click', fazerLogout);
-        document.getElementById('btn-salvar-mapa').addEventListener('click', salvarMapa);
-        document.getElementById('btn-limpar-mapa').addEventListener('click', limparMapa);
-        document.getElementById('btn-limpar-banners').addEventListener('click', limparBanners);
-
-        document.querySelectorAll('[data-tab]').forEach(button => {
-          button.addEventListener('click', () => aba(button.dataset.tab));
-        });
-
-        document.querySelectorAll('input[type="file"][data-banner-index]').forEach(input => {
-          input.addEventListener('change', () => salvarBannerGaleria(input, Number(input.dataset.bannerIndex)));
-        });
-
-        document.addEventListener('click', (event) => {
-          const approveBtn = event.target.closest('[data-approve]');
-          if (approveBtn) aprovar(Number(approveBtn.dataset.approve));
-
-          const removeBtn = event.target.closest('[data-remove]');
-          if (removeBtn) remover(Number(removeBtn.dataset.remove));
-        });
-
-        document.addEventListener('keydown', (event) => {
-          if (event.key === 'Enter' && !els.painel.classList.contains('hidden') && !els.loginScreen.classList.contains('hidden')) {
-            logar();
-          }
-        });
-      }
-
-      function restoreSession() {
-        const status = localStorage.getItem(STORAGE_KEYS.loggedUser);
-        if (status === 'master' || status === 'editor') {
-          exibirPainel(status);
-        }
-      }
-
-      function init() {
-        seedMasterUser();
-        bindEvents();
-        restoreSession();
-      }
-
-      window.toggleCadastro = toggleCadastro;
-      window.logar = logar;
-      window.solicitarCadastro = solicitarCadastro;
-      window.aprovar = aprovar;
-      window.remover = remover;
-      window.aba = aba;
-      window.salvarMapa = salvarMapa;
-      window.salvarBannerGaleria = salvarBannerGaleria;
-      window.fazerLogout = fazerLogout;
-
-      init();
-    })();
-  </script>
 </body>
 </html>
