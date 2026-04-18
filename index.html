@@ -7,322 +7,100 @@
   <link rel="icon" href="img/icon.png" type="image/png" />
   <style>
     :root{
-      --bg:#f6f7fb;
-      --panel:#ffffff;
-      --text:#101828;
-      --muted:#667085;
-      --line:#d0d5dd;
-      --primary:#0b3b66;
-      --primary-2:#1d4ed8;
-      --accent:#c59d5f;
-      --dark:#0f172a;
+      --bg:#f6f7fb; --panel:#ffffff; --text:#101828; --muted:#667085; --line:#d0d5dd;
+      --primary:#0b3b66; --primary-2:#1d4ed8; --accent:#c59d5f; --dark:#0f172a;
       --shadow:0 10px 30px rgba(16,24,40,.08);
-      --radius:20px;
     }
-    *{box-sizing:border-box}
-    html{scroll-behavior:smooth}
-    body{
-      margin:0;
-      font-family:Arial, Helvetica, sans-serif;
-      color:var(--text);
-      background:
-        radial-gradient(circle at top left, rgba(197,157,95,.16), transparent 22%),
-        linear-gradient(180deg, #fbfcfe 0%, #f2f5f9 100%);
-    }
-    a{text-decoration:none;color:inherit}
-    img{max-width:100%;display:block}
-    .topbar{
-      background:var(--dark);
-      color:#fff;
-      padding:10px 24px;
-      font-size:14px;
-      display:flex;
-      justify-content:space-between;
-      gap:12px;
-      flex-wrap:wrap;
-      border-bottom:1px solid rgba(255,255,255,.08);
-    }
+    *{box-sizing:border-box} html{scroll-behavior:smooth}
+    body{margin:0;font-family:Arial,Helvetica,sans-serif;color:var(--text);background:
+      radial-gradient(circle at top left, rgba(197,157,95,.16), transparent 22%),
+      linear-gradient(180deg, #fbfcfe 0%, #f2f5f9 100%)}
+    a{text-decoration:none;color:inherit} img{max-width:100%;display:block}
+    .topbar{background:var(--dark);color:#fff;padding:10px 24px;font-size:14px;display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;border-bottom:1px solid rgba(255,255,255,.08)}
     .topbar .links{display:flex;gap:18px;flex-wrap:wrap}
-    .header{
-      position:sticky;
-      top:0;
-      z-index:30;
-      background:rgba(255,255,255,.85);
-      backdrop-filter:blur(10px);
-      border-bottom:1px solid rgba(16,24,40,.08);
-    }
-    .header-inner, .section{
-      width:min(1180px, calc(100% - 28px));
-      margin:0 auto;
-    }
-    .header-inner{
-      display:flex;
-      justify-content:space-between;
-      align-items:center;
-      padding:14px 0;
-      gap:16px;
-    }
+    .header{position:sticky;top:0;z-index:30;background:rgba(255,255,255,.85);backdrop-filter:blur(10px);border-bottom:1px solid rgba(16,24,40,.08)}
+    .header-inner,.section{width:min(1180px, calc(100% - 28px));margin:0 auto}
+    .header-inner{display:flex;justify-content:space-between;align-items:center;padding:14px 0;gap:16px}
     .brand{display:flex;align-items:center;gap:14px;min-width:0}
-    .brand img{
-      height:58px;width:auto;object-fit:contain;
-      filter:drop-shadow(0 6px 14px rgba(11,59,102,.12));
-    }
+    .brand img{height:58px;width:auto;object-fit:contain;filter:drop-shadow(0 6px 14px rgba(11,59,102,.12))}
     .brand-text h1{margin:0;font-size:22px;line-height:1}
     .brand-text span{display:block;color:var(--muted);font-size:13px;margin-top:4px}
-    .nav{
-      display:flex;align-items:center;gap:16px;flex-wrap:wrap;justify-content:flex-end;
-    }
-    .nav a{
-      color:#344054;font-size:14px;font-weight:700;padding:10px 12px;border-radius:999px;
-      transition:.22s ease;
-    }
+    .nav{display:flex;align-items:center;gap:16px;flex-wrap:wrap;justify-content:flex-end}
+    .nav a{color:#344054;font-size:14px;font-weight:700;padding:10px 12px;border-radius:999px;transition:.22s ease}
     .nav a:hover{background:#eef4ff;color:var(--primary-2)}
-    .btn{
-      border:0; cursor:pointer; padding:12px 18px; border-radius:999px;
-      font-weight:700; transition:.25s ease; font-size:14px;
-    }
+    .btn{border:0;cursor:pointer;padding:12px 18px;border-radius:999px;font-weight:700;transition:.25s ease;font-size:14px}
     .btn:hover{transform:translateY(-1px)}
-    .btn-primary{
-      background:linear-gradient(135deg, var(--primary) 0%, var(--primary-2) 100%);
-      color:#fff; box-shadow:0 10px 24px rgba(29,78,216,.22);
-    }
+    .btn-primary{background:linear-gradient(135deg, var(--primary) 0%, var(--primary-2) 100%);color:#fff;box-shadow:0 10px 24px rgba(29,78,216,.22)}
     .btn-ghost{background:#fff;color:var(--primary);border:1px solid #dbe3ee}
     .hero-wrap{padding:28px 0 12px}
-    .hero{
-      position:relative;
-      min-height:420px;
-      border-radius:32px;
-      overflow:hidden;
-      box-shadow:var(--shadow);
-      background:
-        linear-gradient(120deg, rgba(15,23,42,.82) 0%, rgba(15,23,42,.46) 45%, rgba(15,23,42,.25) 100%),
-        #cbd5e1;
-      border:1px solid rgba(255,255,255,.45);
-    }
-    .hero::after{
-      content:"";
-      position:absolute;inset:0;
-      background:
-        linear-gradient(rgba(255,255,255,.05) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(255,255,255,.05) 1px, transparent 1px);
-      background-size:28px 28px;
-      mix-blend-mode:soft-light;
-      pointer-events:none;
-    }
-    .hero-slide{
-      position:absolute; inset:0;
-      background-size:cover;
-      background-position:center;
-      opacity:0;
-      transform:scale(1.04);
-      transition:opacity .9s ease, transform 6s ease;
-    }
-    .hero-slide.active{opacity:1; transform:scale(1)}
-    .hero-content{
-      position:relative; z-index:2;
-      width:min(680px, calc(100% - 32px));
-      padding:72px 0 56px;
-      margin-left:clamp(18px, 4vw, 52px);
-      color:#fff;
-    }
-    .retro-tag{
-      display:inline-flex;
-      align-items:center;
-      gap:8px;
-      padding:10px 14px;
-      border:1px solid rgba(255,255,255,.26);
-      background:rgba(255,255,255,.08);
-      border-radius:999px;
-      backdrop-filter:blur(8px);
-      box-shadow:0 0 0 1px rgba(197,157,95,.25) inset;
-      font-size:13px;
-      letter-spacing:.08em;
-      text-transform:uppercase;
-      margin-bottom:18px;
-    }
-    .hero h2{
-      font-size:clamp(34px, 5vw, 58px);
-      line-height:.98;
-      margin:0 0 12px;
-    }
-    .hero p{
-      margin:0 0 28px;
-      font-size:18px;
-      color:rgba(255,255,255,.88);
-      max-width:56ch;
-    }
+    .hero{position:relative;min-height:420px;border-radius:32px;overflow:hidden;box-shadow:var(--shadow);
+      background:linear-gradient(120deg, rgba(15,23,42,.82) 0%, rgba(15,23,42,.46) 45%, rgba(15,23,42,.25) 100%), #cbd5e1;
+      border:1px solid rgba(255,255,255,.45)}
+    .hero::after{content:"";position:absolute;inset:0;background:
+      linear-gradient(rgba(255,255,255,.05) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255,255,255,.05) 1px, transparent 1px);
+      background-size:28px 28px;mix-blend-mode:soft-light;pointer-events:none}
+    .hero-slide{position:absolute;inset:0;background-size:cover;background-position:center;opacity:0;transform:scale(1.04);transition:opacity .9s ease, transform 6s ease}
+    .hero-slide.active{opacity:1;transform:scale(1)}
+    .hero-content{position:relative;z-index:2;width:min(680px, calc(100% - 32px));padding:72px 0 56px;margin-left:clamp(18px, 4vw, 52px);color:#fff}
+    .retro-tag{display:inline-flex;align-items:center;gap:8px;padding:10px 14px;border:1px solid rgba(255,255,255,.26);background:rgba(255,255,255,.08);border-radius:999px;backdrop-filter:blur(8px);box-shadow:0 0 0 1px rgba(197,157,95,.25) inset;font-size:13px;letter-spacing:.08em;text-transform:uppercase;margin-bottom:18px}
+    .hero h2{font-size:clamp(34px, 5vw, 58px);line-height:.98;margin:0 0 12px}
+    .hero p{margin:0 0 28px;font-size:18px;color:rgba(255,255,255,.88);max-width:56ch}
     .hero-actions{display:flex;gap:12px;flex-wrap:wrap}
     .hero .btn-ghost{background:rgba(255,255,255,.12);color:#fff;border:1px solid rgba(255,255,255,.22)}
     .section{padding:28px 0}
-    .section-head{
-      display:flex;justify-content:space-between;align-items:end;gap:18px;margin-bottom:18px;flex-wrap:wrap;
-    }
-    .section-head h3{
-      margin:0;font-size:28px;line-height:1.05;
-    }
+    .section-head{display:flex;justify-content:space-between;align-items:end;gap:18px;margin-bottom:18px;flex-wrap:wrap}
+    .section-head h3{margin:0;font-size:28px;line-height:1.05}
     .section-head p{margin:6px 0 0;color:var(--muted);max-width:64ch}
-    .grid{
-      display:grid; gap:18px;
-    }
+    .grid{display:grid;gap:18px}
     .services{grid-template-columns:repeat(4, 1fr)}
-    .service-card, .news-card, .info-card, .contact-card{
-      background:rgba(255,255,255,.86);
-      border:1px solid rgba(208,213,221,.9);
-      border-radius:22px;
-      box-shadow:var(--shadow);
-      transition:.22s ease;
-      overflow:hidden;
-    }
-    .service-card:hover, .news-card:hover, .info-card:hover, .contact-card:hover{
-      transform:translateY(-4px);
-      box-shadow:0 16px 38px rgba(16,24,40,.12);
-    }
-    .service-card{
-      padding:22px;
-      position:relative;
-      isolation:isolate;
-    }
-    .service-card::before{
-      content:"";
-      position:absolute;inset:auto -18px -18px auto;
-      width:84px;height:84px;border-radius:50%;
-      background:radial-gradient(circle, rgba(197,157,95,.22) 0%, transparent 68%);
-      z-index:-1;
-    }
-    .icon{
-      width:52px;height:52px;border-radius:16px;
-      display:grid;place-items:center;
-      font-size:22px;color:#fff;
-      background:linear-gradient(135deg, var(--primary) 0%, var(--primary-2) 100%);
-      margin-bottom:16px;
-      box-shadow:0 8px 18px rgba(29,78,216,.22);
-    }
-    .service-card h4, .news-card h4, .info-card h4, .contact-card h4{
-      margin:0 0 8px;font-size:19px;
-    }
-    .service-card p, .news-card p, .info-card p, .contact-card p{
-      margin:0;color:var(--muted);line-height:1.5;
-    }
+    .service-card,.news-card,.info-card,.contact-card{background:rgba(255,255,255,.86);border:1px solid rgba(208,213,221,.9);border-radius:22px;box-shadow:var(--shadow);transition:.22s ease;overflow:hidden}
+    .service-card:hover,.news-card:hover,.info-card:hover,.contact-card:hover{transform:translateY(-4px);box-shadow:0 16px 38px rgba(16,24,40,.12)}
+    .service-card{padding:22px;position:relative;isolation:isolate}
+    .service-card::before{content:"";position:absolute;inset:auto -18px -18px auto;width:84px;height:84px;border-radius:50%;background:radial-gradient(circle, rgba(197,157,95,.22) 0%, transparent 68%);z-index:-1}
+    .icon{width:52px;height:52px;border-radius:16px;display:grid;place-items:center;font-size:22px;color:#fff;background:linear-gradient(135deg, var(--primary) 0%, var(--primary-2) 100%);margin-bottom:16px;box-shadow:0 8px 18px rgba(29,78,216,.22)}
+    .service-card h4,.news-card h4,.info-card h4,.contact-card h4{margin:0 0 8px;font-size:19px}
+    .service-card p,.news-card p,.info-card p,.contact-card p{margin:0;color:var(--muted);line-height:1.5}
     .news-grid{grid-template-columns:repeat(3, 1fr)}
-    .news-card .thumb{
-      height:180px;
-      background:#cbd5e1 center/cover no-repeat;
-      position:relative;
-    }
-    .news-card .thumb::after{
-      content:"";
-      position:absolute; inset:auto 0 0 0; height:50%;
-      background:linear-gradient(180deg, transparent, rgba(15,23,42,.5));
-    }
+    .news-card .thumb{height:180px;background:#cbd5e1 center/cover no-repeat;position:relative}
+    .news-card .thumb::after{content:"";position:absolute;inset:auto 0 0 0;height:50%;background:linear-gradient(180deg, transparent, rgba(15,23,42,.5))}
     .news-card .body{padding:20px}
-    .pill{
-      display:inline-block; margin-bottom:10px; padding:8px 11px; border-radius:999px;
-      background:#eef4ff; color:var(--primary-2); font-size:12px; font-weight:700;
-      letter-spacing:.04em; text-transform:uppercase;
-    }
+    .pill{display:inline-block;margin-bottom:10px;padding:8px 11px;border-radius:999px;background:#eef4ff;color:var(--primary-2);font-size:12px;font-weight:700;letter-spacing:.04em;text-transform:uppercase}
     .info-grid{grid-template-columns:2fr 1fr}
     .info-list{display:grid;grid-template-columns:repeat(2,1fr);gap:14px}
     .info-card{padding:22px}
     .contact-card{padding:24px}
     .contact-card ul{padding-left:18px;margin:12px 0 0;color:var(--muted)}
-    .footer{
-      margin-top:26px;
-      background:linear-gradient(180deg, #0f172a 0%, #08101f 100%);
-      color:#fff;
-      padding:36px 0 18px;
-      position:relative;
-      overflow:hidden;
-    }
-    .footer::before{
-      content:"";
-      position:absolute; inset:0;
-      background:
-        radial-gradient(circle at 15% 15%, rgba(29,78,216,.22), transparent 18%),
-        radial-gradient(circle at 85% 0%, rgba(197,157,95,.14), transparent 16%);
-      pointer-events:none;
-    }
-    .footer-grid{
-      position:relative;
-      width:min(1180px, calc(100% - 28px));
-      margin:0 auto 18px;
-      display:grid;
-      grid-template-columns:1.5fr 1fr 1fr;
-      gap:18px;
-    }
-    .footer-card{
-      background:rgba(255,255,255,.04);
-      border:1px solid rgba(255,255,255,.08);
-      border-radius:20px;
-      padding:22px;
-      backdrop-filter:blur(8px);
-    }
-    .footer small{
-      position:relative; display:block; width:min(1180px, calc(100% - 28px)); margin:0 auto;
-      color:rgba(255,255,255,.72);
-      text-align:center;
-    }
-    .modal-backdrop{
-      position:fixed; inset:0;
-      background:rgba(15,23,42,.6);
-      backdrop-filter:blur(6px);
-      display:none; align-items:center; justify-content:center;
-      z-index:100;
-      padding:14px;
-    }
+    .footer{margin-top:26px;background:linear-gradient(180deg, #0f172a 0%, #08101f 100%);color:#fff;padding:36px 0 18px;position:relative;overflow:hidden}
+    .footer::before{content:"";position:absolute;inset:0;background:
+      radial-gradient(circle at 15% 15%, rgba(29,78,216,.22), transparent 18%),
+      radial-gradient(circle at 85% 0%, rgba(197,157,95,.14), transparent 16%);pointer-events:none}
+    .footer-grid{position:relative;width:min(1180px, calc(100% - 28px));margin:0 auto 18px;display:grid;grid-template-columns:1.5fr 1fr 1fr;gap:18px}
+    .footer-card{background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);border-radius:20px;padding:22px;backdrop-filter:blur(8px)}
+    .footer small{position:relative;display:block;width:min(1180px, calc(100% - 28px));margin:0 auto;color:rgba(255,255,255,.72);text-align:center}
+    .modal-backdrop{position:fixed;inset:0;background:rgba(15,23,42,.6);backdrop-filter:blur(6px);display:none;align-items:center;justify-content:center;z-index:100;padding:14px}
     .modal-backdrop.show{display:flex}
-    .modal{
-      width:min(460px, 100%);
-      background:#fff;
-      border-radius:24px;
-      box-shadow:0 24px 60px rgba(0,0,0,.24);
-      overflow:hidden;
-      border:1px solid rgba(255,255,255,.65);
-    }
-    .modal-header{
-      padding:22px 24px 12px;
-      background:linear-gradient(135deg, #f8fbff, #fff7ef);
-    }
+    .modal{width:min(520px, 100%);background:#fff;border-radius:24px;box-shadow:0 24px 60px rgba(0,0,0,.24);overflow:hidden;border:1px solid rgba(255,255,255,.65)}
+    .modal-header{padding:22px 24px 12px;background:linear-gradient(135deg, #f8fbff, #fff7ef)}
     .modal-header h4{margin:0 0 4px;font-size:26px}
     .modal-header p{margin:0;color:var(--muted)}
     .modal-body{padding:20px 24px 24px}
     .field{margin-bottom:14px}
     .field label{display:block;font-weight:700;margin-bottom:7px}
-    .field input, .field textarea, .field select{
-      width:100%; border:1px solid #d0d5dd; border-radius:14px; padding:13px 14px;
-      outline:none; font-size:15px; background:#fff;
-    }
-    .field input:focus, .field textarea:focus, .field select:focus{
-      border-color:#7aa2ff; box-shadow:0 0 0 4px rgba(29,78,216,.11);
-    }
-    .modal-actions{display:flex; gap:10px; flex-wrap:wrap; margin-top:8px}
-    .status{
-      padding:12px 14px; border-radius:14px; margin-bottom:14px; font-size:14px; display:none;
-    }
+    .field input,.field textarea,.field select{width:100%;border:1px solid #d0d5dd;border-radius:14px;padding:13px 14px;outline:none;font-size:15px;background:#fff}
+    .field input:focus,.field textarea:focus,.field select:focus{border-color:#7aa2ff;box-shadow:0 0 0 4px rgba(29,78,216,.11)}
+    .modal-actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:8px}
+    .status{padding:12px 14px;border-radius:14px;margin-bottom:14px;font-size:14px;display:none}
     .status.show{display:block}
     .status.ok{background:#ecfdf3;color:#027a48;border:1px solid #abefc6}
     .status.err{background:#fef3f2;color:#b42318;border:1px solid #fecdca}
-    .toolbar-user{
-      display:flex;align-items:center;gap:10px;flex-wrap:wrap;justify-content:flex-end;
-    }
-    .user-chip{
-      padding:10px 14px;border-radius:999px;background:#f3f6fb;color:#344054;border:1px solid #dbe3ee;font-weight:700;
-    }
-    @media (max-width: 1024px){
-      .services{grid-template-columns:repeat(2, 1fr)}
-      .news-grid{grid-template-columns:1fr 1fr}
-      .info-grid{grid-template-columns:1fr}
-      .footer-grid{grid-template-columns:1fr}
-    }
-    @media (max-width: 720px){
-      .header-inner{align-items:flex-start;flex-direction:column}
-      .nav{justify-content:flex-start}
-      .services, .news-grid, .info-list{grid-template-columns:1fr}
-      .hero{min-height:360px}
-      .hero-content{padding:54px 0 42px}
-      .hero p{font-size:16px}
-      .brand img{height:50px}
-      .brand-text h1{font-size:18px}
-    }
+    .status.warn{background:#fffaeb;color:#b54708;border:1px solid #fedf89}
+    .toolbar-user{display:flex;align-items:center;gap:10px;flex-wrap:wrap;justify-content:flex-end}
+    .user-chip{padding:10px 14px;border-radius:999px;background:#f3f6fb;color:#344054;border:1px solid #dbe3ee;font-weight:700}
+    .code-box{padding:14px;border-radius:14px;background:#fff8e8;border:1px dashed #f5c46b;color:#7a4a00;font-weight:700;margin-bottom:14px}
+    .small{font-size:13px;color:var(--muted);line-height:1.5}
+    @media (max-width:1024px){.services{grid-template-columns:repeat(2,1fr)}.news-grid{grid-template-columns:1fr 1fr}.info-grid{grid-template-columns:1fr}.footer-grid{grid-template-columns:1fr}}
+    @media (max-width:720px){.header-inner{align-items:flex-start;flex-direction:column}.nav{justify-content:flex-start}.services,.news-grid,.info-list{grid-template-columns:1fr}.hero{min-height:360px}.hero-content{padding:54px 0 42px}.hero p{font-size:16px}.brand img{height:50px}.brand-text h1{font-size:18px}}
   </style>
 </head>
 <body>
@@ -465,25 +243,47 @@
     <div class="modal">
       <div class="modal-header">
         <h4>Solicitar cadastro</h4>
-        <p>O cadastro ficará pendente até aprovação do usuário MASTER.</p>
+        <p>O e-mail precisa ser confirmado antes de o cadastro seguir para aprovação do MASTER.</p>
       </div>
       <div class="modal-body">
         <div class="status" id="registerStatus"></div>
-        <div class="field">
-          <label for="registerName">Nome completo</label>
-          <input type="text" id="registerName">
+
+        <div id="registerStep1">
+          <div class="field">
+            <label for="registerName">Nome completo</label>
+            <input type="text" id="registerName">
+          </div>
+          <div class="field">
+            <label for="registerEmail">E-mail</label>
+            <input type="email" id="registerEmail">
+          </div>
+          <div class="field">
+            <label for="registerUsername">Usuário</label>
+            <input type="text" id="registerUsername">
+          </div>
+          <div class="field">
+            <label for="registerPassword">Senha</label>
+            <input type="password" id="registerPassword">
+          </div>
+          <div class="modal-actions">
+            <button class="btn btn-primary" onclick="startRegisterVerification()">Enviar código</button>
+            <button class="btn btn-ghost" onclick="closeModal('registerModal')">Fechar</button>
+          </div>
+          <p class="small" style="margin-top:12px">Neste modelo local, o código é simulado no navegador para teste do fluxo. Após confirmar o código, a conta ainda ficará pendente até aprovação do MASTER.</p>
         </div>
-        <div class="field">
-          <label for="registerUsername">Usuário</label>
-          <input type="text" id="registerUsername">
-        </div>
-        <div class="field">
-          <label for="registerPassword">Senha</label>
-          <input type="password" id="registerPassword">
-        </div>
-        <div class="modal-actions">
-          <button class="btn btn-primary" onclick="registerUser()">Enviar para aprovação</button>
-          <button class="btn btn-ghost" onclick="closeModal('registerModal')">Fechar</button>
+
+        <div id="registerStep2" style="display:none">
+          <div class="code-box" id="simulatedCodeBox"></div>
+          <div class="field">
+            <label for="registerCode">Código de confirmação</label>
+            <input type="text" id="registerCode" placeholder="Digite o código recebido">
+          </div>
+          <div class="modal-actions">
+            <button class="btn btn-primary" onclick="confirmRegisterCode()">Confirmar código</button>
+            <button class="btn btn-ghost" onclick="resendRegisterCode()">Gerar novo código</button>
+            <button class="btn btn-ghost" onclick="resetRegisterFlow()">Voltar</button>
+          </div>
+          <p class="small" style="margin-top:12px">Depois da confirmação do código, o cadastro vai para a fila de aprovação do usuário MASTER no painel administrativo.</p>
         </div>
       </div>
     </div>
@@ -495,7 +295,8 @@
       pending: 'portal_pending_users',
       banners: 'db_banners_rotativos',
       news: 'portal_news',
-      session: 'portal_current_session'
+      session: 'portal_current_session',
+      verificationDrafts: 'portal_verification_drafts'
     };
 
     const defaultServices = [
@@ -517,43 +318,18 @@
     ];
 
     const defaultNews = [
-      {
-        title:'Portal institucional em novo layout',
-        category:'Institucional',
-        excerpt:'A nova interface prioriza clareza, desempenho e melhor experiência de navegação para o cidadão.',
-        image:''
-      },
-      {
-        title:'Serviços públicos com acesso mais rápido',
-        category:'Serviços',
-        excerpt:'Os principais serviços foram reorganizados em atalhos diretos e seções mais objetivas.',
-        image:''
-      },
-      {
-        title:'Painel administrativo sincronizado',
-        category:'Tecnologia',
-        excerpt:'Conteúdos publicados no painel são exibidos automaticamente na página inicial do portal.',
-        image:''
-      }
+      { title:'Portal institucional em novo layout', category:'Institucional', excerpt:'A nova interface prioriza clareza, desempenho e melhor experiência de navegação para o cidadão.', image:'' },
+      { title:'Serviços públicos com acesso mais rápido', category:'Serviços', excerpt:'Os principais serviços foram reorganizados em atalhos diretos e seções mais objetivas.', image:'' },
+      { title:'Painel administrativo sincronizado', category:'Tecnologia', excerpt:'Conteúdos publicados no painel são exibidos automaticamente na página inicial do portal.', image:'' }
     ];
 
     function seedSystem(){
       let users = read(STORAGE.users, []);
       const hasMaster = users.some(u => u.username === 'MASTER');
-
       if(!hasMaster){
-        users.push({
-          id: cryptoRandom(),
-          name: 'Usuário Master',
-          username: 'MASTER',
-          password: '456',
-          role: 'master',
-          approved: true,
-          createdAt: new Date().toISOString()
-        });
+        users.push({ id: cryptoRandom(), name: 'Usuário Master', username: 'MASTER', password: '456', role: 'master', approved: true, createdAt: new Date().toISOString() });
         write(STORAGE.users, users);
       }
-
       const banners = read(STORAGE.banners, []);
       if(!Array.isArray(banners) || banners.length === 0){
         write(STORAGE.banners, [
@@ -562,178 +338,182 @@
           'https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=1400&q=80'
         ]);
       }
-
       const news = read(STORAGE.news, []);
-      if(!Array.isArray(news) || news.length === 0){
-        write(STORAGE.news, defaultNews);
-      }
-
+      if(!Array.isArray(news) || news.length === 0) write(STORAGE.news, defaultNews);
       const pending = read(STORAGE.pending, []);
-      if(!Array.isArray(pending)){
-        write(STORAGE.pending, []);
-      }
+      if(!Array.isArray(pending)) write(STORAGE.pending, []);
+      const drafts = read(STORAGE.verificationDrafts, []);
+      if(!Array.isArray(drafts)) write(STORAGE.verificationDrafts, []);
     }
 
-    function read(key, fallback){
-      try{
-        const raw = localStorage.getItem(key);
-        return raw ? JSON.parse(raw) : fallback;
-      }catch(e){
-        return fallback;
-      }
-    }
-
-    function write(key, value){
-      localStorage.setItem(key, JSON.stringify(value));
-    }
-
-    function cryptoRandom(){
-      return Math.random().toString(36).slice(2) + Date.now().toString(36);
-    }
+    function read(key, fallback){ try{ const raw = localStorage.getItem(key); return raw ? JSON.parse(raw) : fallback; }catch(e){ return fallback; } }
+    function write(key, value){ localStorage.setItem(key, JSON.stringify(value)); }
+    function cryptoRandom(){ return Math.random().toString(36).slice(2) + Date.now().toString(36); }
+    function generateCode(){ return String(Math.floor(100000 + Math.random() * 900000)); }
 
     function openModal(id){ document.getElementById(id).classList.add('show'); }
-    function closeModal(id){ document.getElementById(id).classList.remove('show'); }
+    function closeModal(id){ document.getElementById(id).classList.remove('show'); if(id === 'registerModal') resetRegisterFlow(); }
+    function setStatus(id, msg, type='ok'){ const el = document.getElementById(id); el.textContent = msg; el.className = 'status show ' + type; }
+    function clearStatus(id){ const el = document.getElementById(id); el.className = 'status'; el.textContent = ''; }
 
-    function setStatus(id, msg, type='ok'){
-      const el = document.getElementById(id);
-      el.textContent = msg;
-      el.className = 'status show ' + (type === 'ok' ? 'ok' : 'err');
-    }
-
-    function clearStatus(id){
-      const el = document.getElementById(id);
-      el.className = 'status';
-      el.textContent = '';
-    }
-
-    function registerUser(){
+    function startRegisterVerification(){
       clearStatus('registerStatus');
       const name = document.getElementById('registerName').value.trim();
+      const email = document.getElementById('registerEmail').value.trim().toLowerCase();
       const username = document.getElementById('registerUsername').value.trim();
       const password = document.getElementById('registerPassword').value.trim();
 
-      if(!name || !username || !password){
-        return setStatus('registerStatus', 'Preencha nome, usuário e senha.', 'err');
+      if(!name || !email || !username || !password){
+        return setStatus('registerStatus', 'Preencha nome, e-mail, usuário e senha.', 'err');
+      }
+
+      const emailOk = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+      if(!emailOk){
+        return setStatus('registerStatus', 'Informe um e-mail válido.', 'err');
       }
 
       const users = read(STORAGE.users, []);
       const pending = read(STORAGE.pending, []);
+      const drafts = read(STORAGE.verificationDrafts, []);
 
-      const existsApproved = users.some(u => u.username.toLowerCase() === username.toLowerCase());
-      const existsPending = pending.some(u => u.username.toLowerCase() === username.toLowerCase());
+      const usernameExists = users.some(u => u.username.toLowerCase() === username.toLowerCase()) || pending.some(u => u.username.toLowerCase() === username.toLowerCase());
+      const emailExists = users.some(u => (u.email || '').toLowerCase() === email) || pending.some(u => (u.email || '').toLowerCase() === email);
 
-      if(existsApproved || existsPending){
+      if(usernameExists){
         return setStatus('registerStatus', 'Este usuário já existe ou já está pendente.', 'err');
+      }
+      if(emailExists){
+        return setStatus('registerStatus', 'Este e-mail já está em uso ou pendente.', 'err');
+      }
+
+      const code = generateCode();
+      const draft = {
+        id: cryptoRandom(),
+        name, email, username, password,
+        code,
+        codeGeneratedAt: new Date().toISOString()
+      };
+
+      const filtered = drafts.filter(item => item.username.toLowerCase() !== username.toLowerCase() && item.email.toLowerCase() !== email);
+      filtered.push(draft);
+      write(STORAGE.verificationDrafts, filtered);
+
+      document.getElementById('simulatedCodeBox').innerHTML = `Código simulado para <strong>${escapeHtml(email)}</strong>: <strong>${code}</strong>`;
+      document.getElementById('registerStep1').style.display = 'none';
+      document.getElementById('registerStep2').style.display = 'block';
+      setStatus('registerStatus', 'Código gerado. Confirme o código para enviar o cadastro ao MASTER.', 'warn');
+    }
+
+    function resendRegisterCode(){
+      clearStatus('registerStatus');
+      const username = document.getElementById('registerUsername').value.trim();
+      const email = document.getElementById('registerEmail').value.trim().toLowerCase();
+      let drafts = read(STORAGE.verificationDrafts, []);
+      const idx = drafts.findIndex(item => item.username.toLowerCase() === username.toLowerCase() && item.email.toLowerCase() === email);
+
+      if(idx === -1){
+        return setStatus('registerStatus', 'Rascunho de verificação não encontrado. Recomece o cadastro.', 'err');
+      }
+
+      drafts[idx].code = generateCode();
+      drafts[idx].codeGeneratedAt = new Date().toISOString();
+      write(STORAGE.verificationDrafts, drafts);
+
+      document.getElementById('simulatedCodeBox').innerHTML = `Novo código simulado para <strong>${escapeHtml(email)}</strong>: <strong>${drafts[idx].code}</strong>`;
+      setStatus('registerStatus', 'Novo código gerado.', 'warn');
+    }
+
+    function confirmRegisterCode(){
+      clearStatus('registerStatus');
+      const username = document.getElementById('registerUsername').value.trim();
+      const email = document.getElementById('registerEmail').value.trim().toLowerCase();
+      const typedCode = document.getElementById('registerCode').value.trim();
+
+      let drafts = read(STORAGE.verificationDrafts, []);
+      let pending = read(STORAGE.pending, []);
+      const idx = drafts.findIndex(item => item.username.toLowerCase() === username.toLowerCase() && item.email.toLowerCase() === email);
+
+      if(idx === -1){
+        return setStatus('registerStatus', 'Cadastro de verificação não encontrado. Recomece o processo.', 'err');
+      }
+
+      const draft = drafts[idx];
+      if(draft.code !== typedCode){
+        return setStatus('registerStatus', 'Código inválido.', 'err');
       }
 
       pending.push({
         id: cryptoRandom(),
-        name,
-        username,
-        password,
+        name: draft.name,
+        email: draft.email,
+        username: draft.username,
+        password: draft.password,
         role: 'user',
+        emailVerified: true,
         requestedAt: new Date().toISOString()
       });
 
+      drafts.splice(idx, 1);
+      write(STORAGE.verificationDrafts, drafts);
       write(STORAGE.pending, pending);
 
-      document.getElementById('registerName').value = '';
-      document.getElementById('registerUsername').value = '';
-      document.getElementById('registerPassword').value = '';
+      resetRegisterFlow(true);
+      setStatus('registerStatus', 'E-mail confirmado. Cadastro enviado para aprovação do MASTER.');
+    }
 
-      setStatus('registerStatus', 'Cadastro enviado. Aguarde aprovação do MASTER.');
+    function resetRegisterFlow(keepStatus=false){
+      if(!keepStatus) clearStatus('registerStatus');
+      document.getElementById('registerStep1').style.display = 'block';
+      document.getElementById('registerStep2').style.display = 'none';
+      document.getElementById('registerCode').value = '';
+      document.getElementById('simulatedCodeBox').innerHTML = '';
+      if(keepStatus){
+        document.getElementById('registerName').value = '';
+        document.getElementById('registerEmail').value = '';
+        document.getElementById('registerUsername').value = '';
+        document.getElementById('registerPassword').value = '';
+      }
     }
 
     function loginUser(){
       clearStatus('loginStatus');
       const username = document.getElementById('loginUsername').value.trim();
       const password = document.getElementById('loginPassword').value.trim();
-
       const users = read(STORAGE.users, []);
       const match = users.find(u => u.username === username && u.password === password && u.approved);
-
-      if(!match){
-        return setStatus('loginStatus', 'Usuário, senha ou aprovação inválidos.', 'err');
-      }
-
-      write(STORAGE.session, {
-        username: match.username,
-        name: match.name,
-        role: match.role,
-        loggedAt: new Date().toISOString()
-      });
-
+      if(!match) return setStatus('loginStatus', 'Usuário, senha ou aprovação inválidos.', 'err');
+      write(STORAGE.session, { username: match.username, name: match.name, role: match.role, email: match.email || '', loggedAt: new Date().toISOString() });
       renderUserToolbar();
       closeModal('loginModal');
     }
 
-    function logoutUser(){
-      localStorage.removeItem(STORAGE.session);
-      renderUserToolbar();
-    }
+    function logoutUser(){ localStorage.removeItem(STORAGE.session); renderUserToolbar(); }
 
     function renderUserToolbar(){
       const session = read(STORAGE.session, null);
       const toolbar = document.getElementById('toolbarUser');
-
       if(session){
-        toolbar.innerHTML = `
-          <span class="user-chip">Olá, ${escapeHtml(session.name || session.username)}</span>
-          ${session.role === 'master' ? `<a class="btn btn-ghost" href="admin.html">Painel</a>` : ''}
-          <button class="btn btn-primary" onclick="logoutUser()">Sair</button>
-        `;
+        toolbar.innerHTML = `<span class="user-chip">Olá, ${escapeHtml(session.name || session.username)}</span>${session.role === 'master' ? `<a class="btn btn-ghost" href="admin.html">Painel</a>` : ''}<button class="btn btn-primary" onclick="logoutUser()">Sair</button>`;
       }else{
-        toolbar.innerHTML = `
-          <button class="btn btn-ghost" onclick="openModal('loginModal')">Entrar</button>
-          <button class="btn btn-primary" onclick="openModal('registerModal')">Cadastrar</button>
-        `;
+        toolbar.innerHTML = `<button class="btn btn-ghost" onclick="openModal('loginModal')">Entrar</button><button class="btn btn-primary" onclick="openModal('registerModal')">Cadastrar</button>`;
       }
     }
 
     function renderServices(){
-      const grid = document.getElementById('servicesGrid');
-      grid.innerHTML = defaultServices.map(item => `
-        <a class="service-card" href="${item.link}">
-          <div class="icon">${item.icon}</div>
-          <h4>${item.title}</h4>
-          <p>${item.text}</p>
-        </a>
-      `).join('');
+      document.getElementById('servicesGrid').innerHTML = defaultServices.map(item => `<a class="service-card" href="${item.link}"><div class="icon">${item.icon}</div><h4>${item.title}</h4><p>${item.text}</p></a>`).join('');
     }
-
     function renderInfo(){
-      const list = document.getElementById('infoList');
-      list.innerHTML = defaultInfo.map(item => `
-        <div class="info-card">
-          <h4>${item.title}</h4>
-          <p>${item.text}</p>
-        </div>
-      `).join('');
+      document.getElementById('infoList').innerHTML = defaultInfo.map(item => `<div class="info-card"><h4>${item.title}</h4><p>${item.text}</p></div>`).join('');
     }
-
     function renderNews(){
       const news = read(STORAGE.news, defaultNews);
-      const grid = document.getElementById('newsGrid');
-      grid.innerHTML = news.slice(0, 6).map(item => `
-        <article class="news-card">
-          <div class="thumb" style="${item.image ? `background-image:url('${item.image}')` : ''}"></div>
-          <div class="body">
-            <span class="pill">${escapeHtml(item.category || 'Notícia')}</span>
-            <h4>${escapeHtml(item.title || '')}</h4>
-            <p>${escapeHtml(item.excerpt || '')}</p>
-          </div>
-        </article>
-      `).join('');
+      document.getElementById('newsGrid').innerHTML = news.slice(0, 6).map(item => `<article class="news-card"><div class="thumb" style="${item.image ? `background-image:url('${item.image}')` : ''}"></div><div class="body"><span class="pill">${escapeHtml(item.category || 'Notícia')}</span><h4>${escapeHtml(item.title || '')}</h4><p>${escapeHtml(item.excerpt || '')}</p></div></article>`).join('');
     }
-
     function renderHero(){
       const banners = read(STORAGE.banners, []);
       const container = document.getElementById('heroSlides');
       const urls = Array.isArray(banners) && banners.length ? banners : [''];
-      container.innerHTML = urls.map((url, idx) => `
-        <div class="hero-slide ${idx === 0 ? 'active' : ''}" style="${url ? `background-image:url('${url}')` : ''}"></div>
-      `).join('');
-
+      container.innerHTML = urls.map((url, idx) => `<div class="hero-slide ${idx === 0 ? 'active' : ''}" style="${url ? `background-image:url('${url}')` : ''}"></div>`).join('');
       const slides = Array.from(document.querySelectorAll('.hero-slide'));
       if(slides.length > 1){
         let current = 0;
@@ -744,30 +524,12 @@
         }, 4500);
       }
     }
-
-    function escapeHtml(str){
-      return String(str)
-        .replaceAll('&', '&amp;')
-        .replaceAll('<', '&lt;')
-        .replaceAll('>', '&gt;')
-        .replaceAll('"', '&quot;')
-        .replaceAll("'", '&#039;');
-    }
-
-    window.addEventListener('click', (e) => {
-      if(e.target.classList.contains('modal-backdrop')){
-        e.target.classList.remove('show');
-      }
-    });
-
+    function escapeHtml(str){ return String(str).replaceAll('&', '&amp;').replaceAll('<', '&lt;').replaceAll('>', '&gt;').replaceAll('"', '&quot;').replaceAll("'", '&#039;'); }
+    window.addEventListener('click', (e) => { if(e.target.classList.contains('modal-backdrop')) e.target.classList.remove('show'); });
     window.addEventListener('load', () => {
       seedSystem();
       document.getElementById('year').textContent = new Date().getFullYear();
-      renderHero();
-      renderServices();
-      renderInfo();
-      renderNews();
-      renderUserToolbar();
+      renderHero(); renderServices(); renderInfo(); renderNews(); renderUserToolbar();
     });
   </script>
 </body>
