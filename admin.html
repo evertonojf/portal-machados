@@ -1,85 +1,612 @@
 <!DOCTYPE html>
-<html lang="pt-br">
+<html lang="pt-BR">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-<title>Painel</title>
-
-<style>
-body{margin:0;font-family:Arial;background:#f0f0f1}
-.login{height:100vh;display:flex;justify-content:center;align-items:center}
-.card{background:#fff;padding:20px;border:1px solid #ccc;width:300px}
-input{width:100%;padding:10px;margin-bottom:10px}
-button{padding:10px;width:100%;background:#0073aa;color:#fff;border:none;cursor:pointer}
-.painel{display:none;padding:20px}
-</style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Painel Administrativo | Portal Oficial</title>
+  <link rel="icon" href="img/icon.png" type="image/png" />
+  <style>
+    :root{
+      --bg:#0b1020;
+      --bg2:#121a2d;
+      --panel:#ffffff;
+      --text:#101828;
+      --muted:#667085;
+      --line:#d0d5dd;
+      --primary:#0b3b66;
+      --primary-2:#1d4ed8;
+      --accent:#c59d5f;
+      --ok:#027a48;
+      --danger:#b42318;
+      --shadow:0 14px 40px rgba(2,6,23,.18);
+      --radius:20px;
+    }
+    *{box-sizing:border-box}
+    body{
+      margin:0;
+      font-family:Arial, Helvetica, sans-serif;
+      color:var(--text);
+      background:
+        radial-gradient(circle at top right, rgba(197,157,95,.18), transparent 24%),
+        radial-gradient(circle at top left, rgba(29,78,216,.18), transparent 20%),
+        linear-gradient(180deg, #f5f7fb 0%, #eef2f7 100%);
+    }
+    a{text-decoration:none;color:inherit}
+    img{max-width:100%;display:block}
+    .shell{
+      display:grid;
+      grid-template-columns:300px 1fr;
+      min-height:100vh;
+    }
+    .sidebar{
+      background:linear-gradient(180deg, #0f172a, #0b1020);
+      color:#fff;
+      padding:26px 18px;
+      position:sticky;
+      top:0;
+      height:100vh;
+      border-right:1px solid rgba(255,255,255,.06);
+    }
+    .brand{
+      display:flex;gap:12px;align-items:center;margin-bottom:24px;
+      padding:0 8px 14px;border-bottom:1px solid rgba(255,255,255,.08);
+    }
+    .brand img{height:54px;width:auto}
+    .brand h1{font-size:20px;margin:0}
+    .brand span{display:block;color:rgba(255,255,255,.7);font-size:13px;margin-top:4px}
+    .menu{
+      display:grid;gap:8px;margin-top:18px;
+    }
+    .menu button, .menu a{
+      width:100%;
+      text-align:left;
+      background:rgba(255,255,255,.04);
+      color:#fff;
+      border:1px solid rgba(255,255,255,.08);
+      border-radius:16px;
+      padding:14px 14px;
+      font-weight:700;
+      cursor:pointer;
+      transition:.2s ease;
+    }
+    .menu button:hover, .menu a:hover{background:rgba(255,255,255,.1)}
+    .content{
+      padding:24px;
+      width:min(1300px, calc(100% - 12px));
+      margin:0 auto;
+    }
+    .top{
+      display:flex;justify-content:space-between;align-items:center;gap:16px;flex-wrap:wrap;margin-bottom:20px;
+    }
+    .top h2{margin:0;font-size:32px}
+    .top p{margin:6px 0 0;color:var(--muted)}
+    .chip{
+      padding:11px 14px;border-radius:999px;background:#fff;border:1px solid #dbe3ee;font-weight:700;
+      box-shadow:var(--shadow);
+    }
+    .btn{
+      border:0;cursor:pointer;border-radius:14px;padding:12px 16px;font-weight:700;transition:.2s ease;
+    }
+    .btn:hover{transform:translateY(-1px)}
+    .btn-primary{background:linear-gradient(135deg, var(--primary), var(--primary-2));color:#fff}
+    .btn-ghost{background:#fff;color:var(--primary);border:1px solid #dbe3ee}
+    .btn-ok{background:#ecfdf3;color:var(--ok);border:1px solid #abefc6}
+    .btn-danger{background:#fef3f2;color:var(--danger);border:1px solid #fecdca}
+    .panel{
+      background:rgba(255,255,255,.88);
+      border:1px solid rgba(208,213,221,.9);
+      border-radius:24px;
+      box-shadow:var(--shadow);
+      padding:22px;
+      margin-bottom:18px;
+    }
+    .panel h3{margin:0 0 6px}
+    .panel p{margin:0;color:var(--muted)}
+    .grid{
+      display:grid;gap:18px;
+    }
+    .grid-2{grid-template-columns:1.1fr .9fr}
+    .grid-3{grid-template-columns:repeat(3,1fr)}
+    .field{margin-bottom:14px}
+    .field label{display:block;font-weight:700;margin-bottom:7px}
+    .field input,.field textarea,.field select{
+      width:100%;border:1px solid #d0d5dd;border-radius:14px;padding:13px 14px;font-size:15px;background:#fff;
+    }
+    .field textarea{min-height:110px;resize:vertical}
+    .actions{display:flex;gap:10px;flex-wrap:wrap}
+    .status{
+      padding:12px 14px;border-radius:14px;margin-bottom:14px;font-size:14px;display:none
+    }
+    .status.show{display:block}
+    .status.ok{background:#ecfdf3;color:#027a48;border:1px solid #abefc6}
+    .status.err{background:#fef3f2;color:#b42318;border:1px solid #fecdca}
+    .cards{
+      display:grid;gap:14px;
+    }
+    .card{
+      background:#fff;border:1px solid #e4e7ec;border-radius:18px;padding:18px;
+    }
+    .card h4{margin:0 0 8px}
+    .card p{margin:0;color:var(--muted);line-height:1.5}
+    .meta{font-size:13px;color:var(--muted);margin-top:10px}
+    .card-actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:14px}
+    .login-wrap{
+      min-height:100vh;display:grid;place-items:center;padding:18px;
+      background:
+        radial-gradient(circle at top left, rgba(29,78,216,.18), transparent 18%),
+        radial-gradient(circle at bottom right, rgba(197,157,95,.18), transparent 18%),
+        linear-gradient(180deg, #eef2f7 0%, #e9eef6 100%);
+    }
+    .login-card{
+      width:min(460px,100%);
+      background:#fff;border-radius:28px;box-shadow:var(--shadow);padding:26px;border:1px solid rgba(255,255,255,.7);
+    }
+    .login-card h2{margin:0 0 6px;font-size:32px}
+    .login-card p{margin:0 0 18px;color:var(--muted)}
+    .hidden{display:none !important}
+    .empty{
+      padding:20px;border-radius:16px;background:#f8fafc;border:1px dashed #cbd5e1;color:var(--muted)
+    }
+    .thumb{
+      height:120px;border-radius:14px;background:#cbd5e1 center/cover no-repeat;margin-bottom:12px
+    }
+    .small{font-size:13px;color:var(--muted)}
+    @media (max-width: 1024px){
+      .shell{grid-template-columns:1fr}
+      .sidebar{position:relative;height:auto}
+      .grid-2,.grid-3{grid-template-columns:1fr}
+    }
+  </style>
 </head>
-
 <body>
-
-<div class="login" id="login">
-    <div class="card">
-        <img src="img/logo.png" style="width:100%;margin-bottom:15px">
-
-        <input id="user" placeholder="Usuário">
-        <input id="pass" type="password" placeholder="Senha">
-
-        <button onclick="logar()">Entrar</button>
+  <div id="loginScreen" class="login-wrap">
+    <div class="login-card">
+      <h2>Acesso administrativo</h2>
+      <p>Entre com o usuário master para aprovar cadastros e gerenciar o portal.</p>
+      <div class="status" id="loginStatus"></div>
+      <div class="field">
+        <label for="masterUser">Usuário</label>
+        <input id="masterUser" type="text" autocomplete="username" value="MASTER">
+      </div>
+      <div class="field">
+        <label for="masterPass">Senha</label>
+        <input id="masterPass" type="password" autocomplete="current-password" value="456">
+      </div>
+      <div class="actions">
+        <button class="btn btn-primary" onclick="loginMaster()">Entrar no painel</button>
+        <a class="btn btn-ghost" href="index.html">Voltar ao portal</a>
+      </div>
+      <p class="small" style="margin-top:14px">Credenciais solicitadas: usuário <strong>MASTER</strong> e senha <strong>456</strong>.</p>
     </div>
-</div>
+  </div>
 
-<div class="painel" id="painel">
-    <h2>Painel</h2>
+  <div id="adminApp" class="shell hidden">
+    <aside class="sidebar">
+      <div class="brand">
+        <img src="img/logo.png" alt="Logo" onerror="this.style.display='none'">
+        <div>
+          <h1>Painel Master</h1>
+          <span>Gestão local do portal</span>
+        </div>
+      </div>
 
-    <input type="file" onchange="salvarBanner(this)">
-    <button onclick="limparBanner()">Limpar Banner</button>
+      <div class="menu">
+        <button onclick="scrollToSection('secResumo')">Resumo</button>
+        <button onclick="scrollToSection('secPendentes')">Usuários pendentes</button>
+        <button onclick="scrollToSection('secBanners')">Banners</button>
+        <button onclick="scrollToSection('secNoticias')">Notícias</button>
+        <a href="index.html" target="_blank">Abrir portal</a>
+        <button onclick="logoutMaster()">Sair</button>
+      </div>
+    </aside>
 
-    <br><br>
+    <main class="content">
+      <div class="top" id="secResumo">
+        <div>
+          <h2>Administração do portal</h2>
+          <p>Controle centralizado de aprovações, banners e notícias com sincronização imediata na home.</p>
+        </div>
+        <div class="chip">Usuário ativo: MASTER</div>
+      </div>
 
-    <textarea id="mapa" placeholder="Cole iframe do mapa"></textarea>
-    <button onclick="salvarMapa()">Salvar mapa</button>
+      <section class="grid grid-3">
+        <div class="panel">
+          <h3 id="countUsers">0</h3>
+          <p>Usuários aprovados</p>
+        </div>
+        <div class="panel">
+          <h3 id="countPending">0</h3>
+          <p>Cadastros aguardando aprovação</p>
+        </div>
+        <div class="panel">
+          <h3 id="countBanners">0</h3>
+          <p>Banners ativos</p>
+        </div>
+      </section>
 
-    <br><br>
-    <button onclick="logout()">Sair</button>
-</div>
+      <section class="grid grid-2">
+        <div class="panel" id="secPendentes">
+          <h3>Usuários pendentes</h3>
+          <p>Somente o usuário MASTER pode aprovar ou rejeitar novos acessos.</p>
+          <div class="status" id="pendingStatus"></div>
+          <div class="cards" id="pendingList" style="margin-top:16px"></div>
+        </div>
 
-<script>
-function logar(){
-    let u = document.getElementById('user').value
-    let p = document.getElementById('pass').value
+        <div class="panel">
+          <h3>Usuários aprovados</h3>
+          <p>Lista de contas liberadas para acesso no portal.</p>
+          <div class="cards" id="approvedList" style="margin-top:16px"></div>
+        </div>
+      </section>
 
-    if(u=="master" && p=="1012"){
-        document.getElementById('login').style.display="none"
-        document.getElementById('painel').style.display="block"
-    }else{
-        alert("Login inválido")
+      <section class="grid grid-2">
+        <div class="panel" id="secBanners">
+          <h3>Gerenciar banners</h3>
+          <p>As URLs adicionadas aqui entram no banner rotativo da página inicial.</p>
+          <div class="status" id="bannerStatus"></div>
+          <div class="field" style="margin-top:16px">
+            <label for="bannerUrl">URL da imagem do banner</label>
+            <input id="bannerUrl" type="text" placeholder="https://...">
+          </div>
+          <div class="actions">
+            <button class="btn btn-primary" onclick="addBanner()">Adicionar banner</button>
+          </div>
+        </div>
+
+        <div class="panel">
+          <h3>Lista de banners</h3>
+          <p>Reordene removendo e adicionando novamente na sequência desejada.</p>
+          <div class="cards" id="bannerList" style="margin-top:16px"></div>
+        </div>
+      </section>
+
+      <section class="grid grid-2" id="secNoticias">
+        <div class="panel">
+          <h3>Publicar notícia</h3>
+          <p>Crie cartões que serão exibidos automaticamente no portal principal.</p>
+          <div class="status" id="newsStatus"></div>
+          <div class="field" style="margin-top:16px">
+            <label for="newsCategory">Categoria</label>
+            <input id="newsCategory" type="text" placeholder="Institucional">
+          </div>
+          <div class="field">
+            <label for="newsTitle">Título</label>
+            <input id="newsTitle" type="text" placeholder="Título da notícia">
+          </div>
+          <div class="field">
+            <label for="newsExcerpt">Resumo</label>
+            <textarea id="newsExcerpt" placeholder="Resumo curto da notícia"></textarea>
+          </div>
+          <div class="field">
+            <label for="newsImage">URL da imagem</label>
+            <input id="newsImage" type="text" placeholder="https://...">
+          </div>
+          <div class="actions">
+            <button class="btn btn-primary" onclick="addNews()">Publicar notícia</button>
+          </div>
+        </div>
+
+        <div class="panel">
+          <h3>Notícias publicadas</h3>
+          <p>Remova qualquer item para atualizar imediatamente a home.</p>
+          <div class="cards" id="newsList" style="margin-top:16px"></div>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <script>
+    const STORAGE = {
+      users: 'portal_users',
+      pending: 'portal_pending_users',
+      banners: 'db_banners_rotativos',
+      news: 'portal_news',
+      adminSession: 'portal_admin_master_session'
+    };
+
+    function read(key, fallback){
+      try{
+        const raw = localStorage.getItem(key);
+        return raw ? JSON.parse(raw) : fallback;
+      }catch(e){
+        return fallback;
+      }
     }
-}
 
-function salvarBanner(input){
-    let reader = new FileReader()
-    reader.onload = function(e){
-        localStorage.setItem('db_banners_rotativos', JSON.stringify([e.target.result]))
-        alert("Banner salvo")
+    function write(key, value){
+      localStorage.setItem(key, JSON.stringify(value));
     }
-    reader.readAsDataURL(input.files[0])
-}
 
-function limparBanner(){
-    localStorage.removeItem('db_banners_rotativos')
-    alert("Removido")
-}
+    function cryptoRandom(){
+      return Math.random().toString(36).slice(2) + Date.now().toString(36);
+    }
 
-function salvarMapa(){
-    localStorage.setItem('db_mapa_url', document.getElementById('mapa').value)
-    alert("Mapa salvo")
-}
+    function setStatus(id, msg, type='ok'){
+      const el = document.getElementById(id);
+      el.textContent = msg;
+      el.className = 'status show ' + (type === 'ok' ? 'ok' : 'err');
+    }
 
-function logout(){
-    location.reload()
-}
-</script>
+    function clearStatus(id){
+      const el = document.getElementById(id);
+      el.className = 'status';
+      el.textContent = '';
+    }
 
+    function seedSystem(){
+      let users = read(STORAGE.users, []);
+      if(!users.some(u => u.username === 'MASTER')){
+        users.push({
+          id: cryptoRandom(),
+          name: 'Usuário Master',
+          username: 'MASTER',
+          password: '456',
+          role: 'master',
+          approved: true,
+          createdAt: new Date().toISOString()
+        });
+        write(STORAGE.users, users);
+      }
+      if(!Array.isArray(read(STORAGE.pending, []))) write(STORAGE.pending, []);
+      if(!Array.isArray(read(STORAGE.banners, []))) write(STORAGE.banners, []);
+      if(!Array.isArray(read(STORAGE.news, []))) write(STORAGE.news, []);
+    }
+
+    function loginMaster(){
+      clearStatus('loginStatus');
+      seedSystem();
+
+      const username = document.getElementById('masterUser').value.trim();
+      const password = document.getElementById('masterPass').value.trim();
+      const users = read(STORAGE.users, []);
+
+      const master = users.find(u => u.username === username && u.password === password && u.role === 'master' && u.approved);
+      if(!master){
+        return setStatus('loginStatus', 'Credenciais master inválidas.', 'err');
+      }
+
+      write(STORAGE.adminSession, {
+        username: master.username,
+        role: master.role,
+        loggedAt: new Date().toISOString()
+      });
+
+      openAdmin();
+    }
+
+    function logoutMaster(){
+      localStorage.removeItem(STORAGE.adminSession);
+      document.getElementById('adminApp').classList.add('hidden');
+      document.getElementById('loginScreen').classList.remove('hidden');
+    }
+
+    function openAdmin(){
+      document.getElementById('loginScreen').classList.add('hidden');
+      document.getElementById('adminApp').classList.remove('hidden');
+      renderAll();
+    }
+
+    function ensureMasterSession(){
+      seedSystem();
+      const session = read(STORAGE.adminSession, null);
+      if(session && session.username === 'MASTER' && session.role === 'master'){
+        openAdmin();
+      }
+    }
+
+    function renderAll(){
+      renderCounters();
+      renderPending();
+      renderApproved();
+      renderBanners();
+      renderNews();
+    }
+
+    function renderCounters(){
+      document.getElementById('countUsers').textContent = read(STORAGE.users, []).length;
+      document.getElementById('countPending').textContent = read(STORAGE.pending, []).length;
+      document.getElementById('countBanners').textContent = read(STORAGE.banners, []).length;
+    }
+
+    function renderPending(){
+      const pending = read(STORAGE.pending, []);
+      const box = document.getElementById('pendingList');
+
+      if(!pending.length){
+        box.innerHTML = '<div class="empty">Nenhum cadastro pendente no momento.</div>';
+        return;
+      }
+
+      box.innerHTML = pending.map(item => `
+        <div class="card">
+          <h4>${escapeHtml(item.name)}</h4>
+          <p><strong>Usuário:</strong> ${escapeHtml(item.username)}</p>
+          <div class="meta">Solicitado em: ${formatDate(item.requestedAt)}</div>
+          <div class="card-actions">
+            <button class="btn btn-ok" onclick="approveUser('${item.id}')">Aprovar</button>
+            <button class="btn btn-danger" onclick="rejectUser('${item.id}')">Rejeitar</button>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    function renderApproved(){
+      const users = read(STORAGE.users, []);
+      const box = document.getElementById('approvedList');
+      box.innerHTML = users.map(item => `
+        <div class="card">
+          <h4>${escapeHtml(item.name)}</h4>
+          <p><strong>Usuário:</strong> ${escapeHtml(item.username)}<br><strong>Perfil:</strong> ${escapeHtml(item.role)}</p>
+          <div class="meta">Criado em: ${formatDate(item.createdAt)}</div>
+          ${item.username !== 'MASTER' ? `
+            <div class="card-actions">
+              <button class="btn btn-danger" onclick="removeApprovedUser('${item.id}')">Remover</button>
+            </div>
+          ` : ''}
+        </div>
+      `).join('');
+    }
+
+    function approveUser(id){
+      const pending = read(STORAGE.pending, []);
+      const users = read(STORAGE.users, []);
+      const user = pending.find(item => item.id === id);
+      if(!user) return;
+
+      users.push({
+        id: cryptoRandom(),
+        name: user.name,
+        username: user.username,
+        password: user.password,
+        role: 'user',
+        approved: true,
+        createdAt: new Date().toISOString()
+      });
+
+      write(STORAGE.users, users);
+      write(STORAGE.pending, pending.filter(item => item.id !== id));
+      setStatus('pendingStatus', 'Usuário aprovado com sucesso.');
+      renderAll();
+    }
+
+    function rejectUser(id){
+      const pending = read(STORAGE.pending, []);
+      write(STORAGE.pending, pending.filter(item => item.id !== id));
+      setStatus('pendingStatus', 'Cadastro rejeitado e removido.');
+      renderAll();
+    }
+
+    function removeApprovedUser(id){
+      let users = read(STORAGE.users, []);
+      const target = users.find(u => u.id === id);
+      if(!target || target.username === 'MASTER') return;
+
+      users = users.filter(u => u.id !== id);
+      write(STORAGE.users, users);
+      renderAll();
+    }
+
+    function addBanner(){
+      clearStatus('bannerStatus');
+      const input = document.getElementById('bannerUrl');
+      const url = input.value.trim();
+      if(!url) return setStatus('bannerStatus', 'Informe a URL da imagem.', 'err');
+
+      const banners = read(STORAGE.banners, []);
+      banners.push(url);
+      write(STORAGE.banners, banners);
+      input.value = '';
+      setStatus('bannerStatus', 'Banner adicionado com sucesso.');
+      renderAll();
+    }
+
+    function removeBanner(index){
+      const banners = read(STORAGE.banners, []);
+      banners.splice(index, 1);
+      write(STORAGE.banners, banners);
+      renderAll();
+    }
+
+    function renderBanners(){
+      const banners = read(STORAGE.banners, []);
+      const box = document.getElementById('bannerList');
+
+      if(!banners.length){
+        box.innerHTML = '<div class="empty">Nenhum banner cadastrado.</div>';
+        return;
+      }
+
+      box.innerHTML = banners.map((url, index) => `
+        <div class="card">
+          <div class="thumb" style="background-image:url('${url}')"></div>
+          <p>${escapeHtml(url)}</p>
+          <div class="card-actions">
+            <button class="btn btn-danger" onclick="removeBanner(${index})">Remover</button>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    function addNews(){
+      clearStatus('newsStatus');
+      const category = document.getElementById('newsCategory').value.trim() || 'Notícia';
+      const title = document.getElementById('newsTitle').value.trim();
+      const excerpt = document.getElementById('newsExcerpt').value.trim();
+      const image = document.getElementById('newsImage').value.trim();
+
+      if(!title || !excerpt){
+        return setStatus('newsStatus', 'Preencha ao menos categoria, título e resumo.', 'err');
+      }
+
+      const news = read(STORAGE.news, []);
+      news.unshift({
+        id: cryptoRandom(),
+        category,
+        title,
+        excerpt,
+        image
+      });
+      write(STORAGE.news, news);
+
+      document.getElementById('newsCategory').value = '';
+      document.getElementById('newsTitle').value = '';
+      document.getElementById('newsExcerpt').value = '';
+      document.getElementById('newsImage').value = '';
+
+      setStatus('newsStatus', 'Notícia publicada com sucesso.');
+      renderAll();
+    }
+
+    function removeNews(index){
+      const news = read(STORAGE.news, []);
+      news.splice(index, 1);
+      write(STORAGE.news, news);
+      renderAll();
+    }
+
+    function renderNews(){
+      const news = read(STORAGE.news, []);
+      const box = document.getElementById('newsList');
+
+      if(!news.length){
+        box.innerHTML = '<div class="empty">Nenhuma notícia publicada.</div>';
+        return;
+      }
+
+      box.innerHTML = news.map((item, index) => `
+        <div class="card">
+          ${item.image ? `<div class="thumb" style="background-image:url('${item.image}')"></div>` : ''}
+          <h4>${escapeHtml(item.title)}</h4>
+          <p><strong>${escapeHtml(item.category || 'Notícia')}</strong><br>${escapeHtml(item.excerpt || '')}</p>
+          <div class="card-actions">
+            <button class="btn btn-danger" onclick="removeNews(${index})">Remover</button>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    function escapeHtml(str){
+      return String(str)
+        .replaceAll('&', '&amp;')
+        .replaceAll('<', '&lt;')
+        .replaceAll('>', '&gt;')
+        .replaceAll('"', '&quot;')
+        .replaceAll("'", '&#039;');
+    }
+
+    function formatDate(value){
+      try{
+        return new Date(value).toLocaleString('pt-BR');
+      }catch(e){
+        return value || '-';
+      }
+    }
+
+    function scrollToSection(id){
+      document.getElementById(id)?.scrollIntoView({behavior:'smooth', block:'start'});
+    }
+
+    window.addEventListener('load', ensureMasterSession);
+  </script>
 </body>
 </html>
